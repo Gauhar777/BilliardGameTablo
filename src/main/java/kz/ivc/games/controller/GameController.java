@@ -2,6 +2,7 @@ package kz.ivc.games.controller;
 
 import kz.ivc.games.dto.ResultDTO;
 import kz.ivc.games.dto.ResultGameDTO;
+import kz.ivc.games.entity.Competition;
 import kz.ivc.games.entity.Game;
 import kz.ivc.games.entity.Gamer;
 import kz.ivc.games.entity.Partner;
@@ -12,6 +13,7 @@ import kz.ivc.games.repo.PartnerRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -19,10 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import sun.swing.BakedArrayList;
 
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class GameController {
@@ -31,17 +30,22 @@ public class GameController {
     private  GamerRepo gamerRepo;
     private GameRepo gameRepo;
     private PartnerRepo partnerRepo;
+    private CompetitationRepo competitationRepo;
 
     public GameController(CompetitationRepo competitationRepo, GameRepo gameRepo, GamerRepo gamerRepo, PartnerRepo partnerRepo) {
         this.gameRepo = gameRepo;
         this.gamerRepo = gamerRepo;
         this.partnerRepo = partnerRepo;
+        this.competitationRepo = competitationRepo;
     }
 
     //***********************************GameCompetition*******************************************************
 
-    @RequestMapping(value = "/showGameOnTable", method = RequestMethod.GET)
-    public String showGame(@ModelAttribute("model") ModelMap model) {
+    @RequestMapping(value = "/competition/{idCompetition}/showGames", method = RequestMethod.GET)
+    public String showGame(@ModelAttribute("model") ModelMap model, @PathVariable Long idCompetition) {
+        Competition competition = this.competitationRepo.getOne(idCompetition);
+        model.put("competition", competition);
+
         Long IdCompetition=1L;
         List<Partner> partnerList=this.partnerRepo.findByIdCompetition(IdCompetition);
 
@@ -107,41 +111,14 @@ public class GameController {
             resultDTO.setGameList(resultGameDTOS);
             resultDTOList.add(resultDTO);
         }
-        resultDTOList.sort((o1, o2) -> new Integer(o2.getAgrBall()).compareTo(o1.getAgrBall()));
-        
 
+        //resultDTOList.sort((o1, o2) -> new Integer(o2.getAgrBall()).compareTo(o1.getAgrBall()));
+
+        /**/
+        Collections.sort(resultDTOList, new sortByDef());
         model.addAttribute("results", resultDTOList);
         return "game";
 
     }
 
-
-    //****************************When gamers add to Competition*****************************************************
-  /*  public void function(Model model) {
-        List<Partner> partnerList = this.partnerRepo.findIds();
-        Object[] abc = partnerList.toArray();
-        int N = abc.length;//6
-        names = new int[N]
-
-        for (int i = 0; i < N; i++) {
-
-            for (int j = i + 1; j < N; j++) {
-
-                Long idP1=Long.parseLong(String.valueOf(abc[i]));
-                Long idP2=Long.parseLong(String.valueOf(abc[j]));
-
-                String namePartner1=this.gamerRepo.findNameById(idP1);
-                String namePartner2=this.gamerRepo.findNameById(idP2);
-                names+=name;
-
-
-               Game game=new Game();
-               game.setId_partner1(idP1);
-               game.setId_partner2(idP2);
-               game.setId_competition(1L);
-               this.gameRepo.save(game);
-            }
-        }
-    }
-    */
 }
