@@ -19,33 +19,13 @@ public class Gamer implements Serializable{
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     @Column
     private String FIO;
 
-    public String getFIO() {
-        return FIO;
-    }
-    public void setFIO(String FIO) {
-        this.FIO = FIO;
-    }
 
     @Column
     private String nick;
-
-    public String getNick() {
-        return nick;
-    }
-    public void setNick(String nick) {
-        this.nick = nick;
-    }
 
 
 }
