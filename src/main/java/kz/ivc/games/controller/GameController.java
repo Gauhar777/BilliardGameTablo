@@ -1,5 +1,6 @@
 package kz.ivc.games.controller;
 
+import kz.ivc.games.dto.GameForm;
 import kz.ivc.games.dto.ResultDTO;
 import kz.ivc.games.dto.ResultGameDTO;
 import kz.ivc.games.entity.Competition;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import sun.swing.BakedArrayList;
 
 import java.sql.ResultSet;
 import java.util.*;
@@ -41,13 +41,12 @@ public class GameController {
 
     //***********************************GameCompetition*******************************************************
 
-    @RequestMapping(value = "/competition/{idCompetition}/showGames", method = RequestMethod.GET)
+    @RequestMapping(value = "/Competition/{idCompetition}/showGames", method = RequestMethod.GET)
     public String showGame(@ModelAttribute("model") ModelMap model, @PathVariable Long idCompetition) {
         Competition competition = this.competitationRepo.getOne(idCompetition);
         model.put("competition", competition);
 
-        Long IdCompetition=1L;
-        List<Partner> partnerList=this.partnerRepo.findByIdCompetition(IdCompetition);
+        List<Partner> partnerList=this.partnerRepo.findByIdCompetition(idCompetition);
 
         List<ResultDTO> resultDTOList = new ArrayList<ResultDTO>();
         int agrBall;
@@ -69,7 +68,7 @@ public class GameController {
                 ResultGameDTO resultGameDTO = new ResultGameDTO();
                 //ResultGameDTO resultGameDTO2 = new ResultGameDTO();
                 if (partner1.getId()!=partner2.getId()){
-                    Game game=this.gameRepo.findByIdPartner1AndIdPartner2AndIdCompetition(partner1.getId(),partner2.getId(),IdCompetition);
+                    Game game=this.gameRepo.findByIdPartner1AndIdPartner2AndIdCompetition(partner1.getId(),partner2.getId(),idCompetition);
                     if (game!=null) {
                         Gamer gamer2 = this.gamerRepo.getOne(partner2.getIdGamer());
                         resultGameDTO.setNick(gamer2.getNick());
@@ -82,7 +81,7 @@ public class GameController {
                             ++agrBall;
                         }
                     }else {
-                        Game gameMirror=this.gameRepo.findByIdPartner1AndIdPartner2AndIdCompetition(partner2.getId(),partner1.getId(),IdCompetition);
+                        Game gameMirror=this.gameRepo.findByIdPartner1AndIdPartner2AndIdCompetition(partner2.getId(),partner1.getId(),idCompetition);
                         if (gameMirror!=null) {
                             Gamer gamer2 = this.gamerRepo.getOne(partner2.getIdGamer());
                             resultGameDTO.setIdGamer(partner2.getIdGamer());
@@ -121,4 +120,39 @@ public class GameController {
 
     }
 
+
+
+    //*********************************************Add points********************************************
+
+   /* @RequestMapping(value = "/addPoint/{id}", method = RequestMethod.GET)
+    public String editGameFormGet(@ModelAttribute("model") ModelMap model, @PathVariable Long id) {
+        Game game = this.gameRepo.getOne(id);
+        model.put("game", game);
+        return "addPoint";
+    }
+
+
+    @RequestMapping(value = {"/editGameSave"}, method = RequestMethod.POST)
+    public String gameFormSubmit(Model model, GameForm gameForm) {
+        LOG.info("competitionFormSubmit****");
+        String id = gameForm.getId();
+        Long Rid = Long.parseLong(id);
+        Game game = this.gameRepo.getOne(Rid);
+        String point1 = gameForm.getPoint1();
+        String point2 =gameForm.getPoint2();
+        if ((point1 != null && point2 != null) && (point1.length() > 0 && point2.length() > 0)) {
+            game.setPoint1(Long.parseLong(point1));
+            game.setPoint2(Long.parseLong(point2));
+            this.gameRepo.save(game);
+            return "redirect:/listOFGames";
+        } else {
+            /*
+            String error = "Name is required!";
+            model.addAttribute("errorMessage", error);
+            */
+  /*          return "error";
+        }
+
+    }
+*/
 }
