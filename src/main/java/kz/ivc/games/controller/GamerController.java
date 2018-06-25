@@ -49,25 +49,27 @@ public class GamerController {
     //***************************************************AddGamersToCompetition*********************************
     @RequestMapping(value = "/competition/{idCompetition}/addGamers", method = RequestMethod.GET)
     public String signInCompetitionFormGet(@ModelAttribute("model") ModelMap model, @PathVariable Long idCompetition) {
-    Competition competition = this.competitationRepo.getOne(idCompetition);
-    model.put("competition", competition);
-    List<Gamer> gamerList = this.gamerRepo.findAll();
-    model.addAttribute("gamers", gamerList);
-    return "gamers";
-}
+        Competition competition = this.competitationRepo.getOne(idCompetition);
+        model.put("competition", competition);
+        List<Gamer> gamerList = this.gamerRepo.findAll();
+        model.addAttribute("gamers", gamerList);
+        return "gamers";
+    }
 
     //*****************************************Select Partners********************************************
+
+
     @RequestMapping(value = "{idC}/{idG}", method = RequestMethod.GET)
     public String addPartner(@PathVariable Long idG, @PathVariable Long idC  ) {
         Long competitionId=idC;
         Long gamerId=idG;
-          LOG.info("gamer Id=" + gamerId);
-          LOG.info("competition Id=" + competitionId);
+        LOG.info("gamer Id=" + gamerId);
+        LOG.info("competition Id=" + competitionId);
         Partner partner=new Partner();
         partner.setIdCompetition(competitionId);
         partner.setIdGamer(gamerId);
         this.partnerRepo.save(partner);
-        return "redirect:/competition/{idC}";
+        return "redirect:/competition/{idC}/addGamers";
     }
 
     //*********************************************************NewGamer*******************************************
@@ -80,7 +82,9 @@ public class GamerController {
 
 
     @RequestMapping(value = {"{idC}/addGamers"}, method = RequestMethod.POST)
-    public String gamersSave(@PathVariable Long idC, Model model, GamerForm gamersForm) {
+    public String gamersSave(@PathVariable Long idC, @ModelAttribute("model") ModelMap model, GamerForm gamersForm) {
+        Competition competition = this.competitationRepo.getOne(idC);
+        model.put("competition", competition);
         Gamer gamer = new Gamer();
         String FIO = gamersForm.getFIO();
         String nick = gamersForm.getNick();
@@ -91,12 +95,11 @@ public class GamerController {
             gamer.setFIO(FIO);
             gamer.setNick(nick);
             this.gamerRepo.save(gamer);
-            return "redirect:/competition/{idC}";
+            return "redirect:/competition/{idC}/addGamers";
         } else {
             return "editGamer";
         }
     }
-
 
 
     //***********************************************Delete********************************************
@@ -104,7 +107,7 @@ public class GamerController {
     public String deleteGamer(@PathVariable Long id,@PathVariable Long idC) {
         Gamer gamer = this.gamerRepo.getOne(id);
         this.gamerRepo.delete(gamer);
-        return "redirect:/competition/{idC}";
+        return "redirect:/competition/{idC}/addGamers";
     }
 
 
@@ -112,13 +115,13 @@ public class GamerController {
 
 
 
-    @GetMapping("/partners")
+   /* @GetMapping("/partners")
     public String partner(@ModelAttribute("model") ModelMap model) {
         List<Partner> partnerList = this.partnerRepo.findAll();
         model.addAttribute("partners", partnerList);
 
         return "partners";
     }
-
+*/
 
 }
