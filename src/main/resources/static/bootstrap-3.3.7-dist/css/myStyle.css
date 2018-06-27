@@ -7,15 +7,15 @@ body{
 }
 
 .btn-success{
-        width: 100px;
+        width: 80px;
         }
 
 .btn-warning{
-        width: 100px;
+        width: 80px;
         }
 
 .btn-danger{
-        width: 100px;
+        width: 80px;
         }
 
 .btn-info{
@@ -26,14 +26,21 @@ background-color: #3EB2A8;
 background-color: #3EB2A8;
 }
 .text-info{
-color:#3EB2A8;
+color:#eee;
 font-style:bold;
 text-shadow: #45B8DA 0 0 2px, #fff -1 -1 0;
 }
 .table{
-border: #eee;
+border: #C4BFBF;
 }
 
 tr:nth-child(even) {
 background-color: #474747;
+}
+
+.off{
+background-color: #eee;
+}
+.on{
+background-color: green;
 }
