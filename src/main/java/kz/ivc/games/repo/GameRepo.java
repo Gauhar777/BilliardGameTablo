@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface GameRepo extends JpaRepository<Game,Long> {
-    List<Game> findByIdCompetition(long idCompetition);
+    Game findByIdCompetition(long idCompetition);
     Game findByIdPartner1AndIdPartner2AndIdCompetition(long IdPartner1,long IdPartner2,long IdCompetition);
 }
