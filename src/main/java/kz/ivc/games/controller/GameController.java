@@ -28,6 +28,8 @@ import static org.hibernate.validator.internal.util.Contracts.assertTrue;
 @Controller
 public class GameController {
     private Logger LOG = LoggerFactory.getLogger(HelloController.class);
+    private final ResourceBundle resource = ResourceBundle.getBundle("kz.ivc.games.inter",
+            new Locale("ru"));
     @Autowired
     private GamerRepo gamerRepo;
     private GameRepo gameRepo;
@@ -47,7 +49,7 @@ public class GameController {
     public String showGame(@ModelAttribute("model") ModelMap model, @PathVariable Long idCompetition) {
         Competition competition = this.competitationRepo.getOne(idCompetition);
         model.put("competition", competition);
-
+        model.addAttribute("resource",resource);
         List<Partner> partnerList = this.partnerRepo.findByIdCompetition(idCompetition);
 
         List<ResultDTO> resultDTOList = new ArrayList<ResultDTO>();
@@ -119,7 +121,6 @@ public class GameController {
                                 ++agrBall;
                             }
                         } else {
-                            LOG.error("error " + partner2.getId(), partner1.getId());
                         }
                     }
                 } else {
@@ -153,15 +154,35 @@ public class GameController {
     //*********************************************Add points********************************************
 
     @RequestMapping(value = "/{idC}/{idG}/addPoint", method = RequestMethod.GET)
-    public String addPointFormGet(@ModelAttribute("model") ModelMap model, @PathVariable Long idG,Long idC) {
+    public String addPointFormGet(@ModelAttribute("model") ModelMap model, @PathVariable Long idG,  @PathVariable Long idC) {
+
         Game game = this.gameRepo.getOne(idG);
+        model.addAttribute("resource",resource);
         model.put("game", game);
+
+        Long idPartner1=game.getIdPartner1();
+        Long idPartner2=game.getIdPartner2();
+
+        Partner partner1=this.partnerRepo.getOne(idPartner1);
+        Partner partner2=this.partnerRepo.getOne(idPartner2);
+
+        Long idGamer1=partner1.getIdGamer();
+        Long idGamer2=partner2.getIdGamer();
+
+        Gamer gamer1=this.gamerRepo.getOne(idGamer1);
+        Gamer gamer2=this.gamerRepo.getOne(idGamer2);
+
+        Competition competition = this.competitationRepo.getOne(idC);
+        model.put("competition",competition);
+
+        model.put("gamer1",gamer1);
+        model.put("gamer2",gamer2);
         return "addPoint";
     }
 
 
     @RequestMapping(value = {"/{idC}/{idG}/addPoint"}, method = RequestMethod.POST)
-    public String gameFormSubmit(@ModelAttribute("model") ModelMap model,  GameForm gameForm,  Game game, @PathVariable Long idG,Long idC) {
+    public String gameFormSubmit(@ModelAttribute("model") ModelMap model,  GameForm gameForm,Game game,@PathVariable Long idG,Long idC) {
 
         long rId=Long.parseLong(String.valueOf(idG));
         game = this.gameRepo.getOne(rId);
