@@ -1,0 +1,52 @@
+*{
+     color: #eee;
+     font-family: Georgia, sans-serif;
+     font-size:1em;
+     }
+a{
+    text-decoration: none;
+	color: #b5b5b5;
+ }
+a:hover {
+    	color: #3EB2A8;
+    	}
+.btn {
+    font-size:1em;
+    margin-bottom: 0.4rem;
+    }
+.btn{
+    border-radius: 50px;
+    color: #fff;
+    }
+
+body{
+background-color: #343239;
+}
+
+
+td button{
+float:right;
+margin-right:0.4rem;
+}
+
+
+.table{
+border: #C4BFBF;
+}
+
+.table button{
+font-size:1em;
+}
+.table button{
+padding: 0.2rem 0.5rem ;
+}
+tr:nth-child(even) {
+background-color: #46454c;
+}
+
+
+form button{
+float:right;
+}
+
+
