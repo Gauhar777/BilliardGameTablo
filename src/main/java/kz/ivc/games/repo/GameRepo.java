@@ -10,4 +10,6 @@ import java.util.List;
 public interface GameRepo extends JpaRepository<Game,Long> {
     Game findByIdCompetition(long idCompetition);
     Game findByIdPartner1AndIdPartner2AndIdCompetition(long IdPartner1,long IdPartner2,long IdCompetition);
+    List<Game> findByIdPartner1AndIdCompetition(long IdPartner1,long IdCompetition);
+    List<Game> findByIdPartner2AndIdCompetition(long IdPartner2,long IdCompetition);
 }
