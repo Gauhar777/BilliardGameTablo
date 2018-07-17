@@ -16,4 +16,8 @@ public class ResultDTO implements Serializable {
     private long agrPoint1;
     private long agrPoint2;
     private long deference;
+
+    public int getAgrBall() {
+        return agrBall;
+    }
 }
