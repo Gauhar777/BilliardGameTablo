@@ -11,5 +11,6 @@ import java.util.List;
 @Repository
 public interface PartnerRepo extends JpaRepository<Partner,Long> {
     List<Partner> findByIdCompetition(long idCompetition);
-    List<Partner> findIdByIdCompetition(long idCompetition);
+    Partner findByIdCompetitionAndIdGamer(long idCompetition,long idGamer);
+    Partner findByIdCompetitionAndId(long idCompetition,long id);
 }
