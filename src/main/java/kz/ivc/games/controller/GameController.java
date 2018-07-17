@@ -47,12 +47,14 @@ public class GameController {
 
     @RequestMapping(value = "/Competition/{idCompetition}/showGames", method = RequestMethod.GET)
     public String showGame(@ModelAttribute("model") ModelMap model, @PathVariable Long idCompetition) {
+        model.addAttribute("resource",resource);
+
         Competition competition = this.competitationRepo.getOne(idCompetition);
         model.put("competition", competition);
-        model.addAttribute("resource",resource);
+
         List<Partner> partnerList = this.partnerRepo.findByIdCompetition(idCompetition);
 
-        List<ResultDTO> resultDTOList = new ArrayList<ResultDTO>();
+        List<ResultDTO> resultDTOList = new ArrayList<ResultDTO>() ;
         int agrBall;
         long agrPoint1;  // salgan sharlar sany
         long agrPoint2;  // jibergen sharlar sany
@@ -62,20 +64,26 @@ public class GameController {
             agrPoint1 = 0;  // salgan sharlar sany
             agrPoint2 = 0;  // jibergen sharlar sany
 
+        //*********По партнерам найтти имена играков1
             ResultDTO resultDTO = new ResultDTO();
             Gamer gamer1 = this.gamerRepo.getOne(partner1.getIdGamer());
             resultDTO.setId(gamer1.getId());
             resultDTO.setNick(gamer1.getNick());
-            // *****
+
+
+        // ********Игрок2
             List<ResultGameDTO> resultGameDTOS = new ArrayList<>();
+
             for (Partner partner2 : partnerList) {
                 ResultGameDTO resultGameDTO = new ResultGameDTO();
-                //ResultGameDTO resultGameDTO2 = new ResultGameDTO();
+
                 if (partner1.getId() != partner2.getId()) {
-                    Game searchGame=this.gameRepo.findByIdPartner1AndIdPartner2AndIdCompetition(partner1.getId(), partner2.getId(), idCompetition);
-                    Game searchGameMirror = this.gameRepo.findByIdPartner1AndIdPartner2AndIdCompetition(partner2.getId(), partner1.getId(), idCompetition);
-                    if(searchGame == null) {
-                        if (searchGameMirror==null) {
+
+                //******Create game where play Gamer1 and Gamer2
+                    Game game=this.gameRepo.findByIdPartner1AndIdPartner2AndIdCompetition(partner1.getId(), partner2.getId(), idCompetition);
+                    Game gameMirror = this.gameRepo.findByIdPartner1AndIdPartner2AndIdCompetition(partner2.getId(), partner1.getId(), idCompetition);
+                    if(game == null) {
+                        if (gameMirror==null) {
                             Game newGame = new Game();
                             newGame.setIdCompetition(idCompetition);
                             newGame.setIdPartner1(partner1.getId());
@@ -85,24 +93,25 @@ public class GameController {
                             this.gameRepo.save(newGame);
                         }
                     }
-                    Game game = this.gameRepo.findByIdPartner1AndIdPartner2AndIdCompetition(partner1.getId(), partner2.getId(), idCompetition);
 
+                //***********Game
                     if (game != null) {
-                        long idGame = game.getId();
-                        resultGameDTO.setId(idGame);
+                        resultGameDTO.setId(game.getId());
+
                         Gamer gamer2 = this.gamerRepo.getOne(partner2.getIdGamer());
                         resultGameDTO.setNick(gamer2.getNick());
                         resultGameDTO.setIdCompetition(idCompetition);
-
                         resultGameDTO.setPoint1(game.getPoint1());
                         resultGameDTO.setPoint2(game.getPoint2());
+
                         agrPoint1 = agrPoint1 + game.getPoint1();
                         agrPoint2 = agrPoint2 + game.getPoint2();
+
                         if (game.getPoint1() > game.getPoint2()) {
                             ++agrBall;
                         }
+
                     } else {
-                        Game gameMirror = this.gameRepo.findByIdPartner1AndIdPartner2AndIdCompetition(partner2.getId(), partner1.getId(), idCompetition);
 
                         if (gameMirror != null) {
                             long idGame = gameMirror.getId();
@@ -117,36 +126,46 @@ public class GameController {
 
                             agrPoint1 = agrPoint1 + gameMirror.getPoint2();
                             agrPoint2 = agrPoint2 + gameMirror.getPoint1();
+
                             if (gameMirror.getPoint2() > gameMirror.getPoint1()) {
                                 ++agrBall;
                             }
-                        } else {
                         }
                     }
                 } else {
                     resultGameDTO.setIdGamer(gamer1.getId());
                 }
+
                 resultGameDTOS.add(resultGameDTO);
             }
+
             resultDTO.setAgrPoint1(agrPoint1);
             resultDTO.setAgrPoint2(agrPoint2);
+
             resultDTO.setAgrBall(agrBall);
+
             resultDTO.setDeference(agrPoint1 - agrPoint2);
+
+          /*resultGameDTOS.sort(Comparator.comparing(ResultGameDTO :: getPoint1)
+                    .thenComparing(Comparator.comparing(ResultGameDTO :: getPoint2))
+          );
+         */
+
+
+
             resultDTO.setGameList(resultGameDTOS);
 
             resultDTOList.add(resultDTO);
 
-            //resultDTOList.sort(Comparator.comparing(resultDTO::getAgrBall).thenComparing(resultDTO::getDeference));
-
         }
+       //******* sort by deference and agrBall
+       resultDTOList.sort(Comparator.comparing(ResultDTO::getAgrBall)
+            .reversed()
+            .thenComparing(Comparator.comparing(ResultDTO::getDeference)
+            .reversed()) );
 
-
-        for (int i = 0; i < resultDTOList.size(); i++) {
-            System.out.println(resultDTOList.get(i));
-        }
-        System.out.println(resultDTOList);
-        model.addAttribute("results", resultDTOList);
-        return "game";
+       model.addAttribute("results", resultDTOList);
+        return "games";
 
     }
 
