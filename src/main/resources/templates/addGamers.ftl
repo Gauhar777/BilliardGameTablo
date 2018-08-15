@@ -47,7 +47,7 @@
                         <input class="form-control" id="Nick name" name="nick" type="text"/>
                     </div>
             </div>
-            <button type="submit" id="ok" class="btn btn-primary btn-lg" >${model["resource"].getString("Add new gamer")}</button>
+            <button type="submit" class="btn btn-primary btn-lg" >${model["resource"].getString("Add new gamer")}</button>
         </form>
 </div>
 </body>
