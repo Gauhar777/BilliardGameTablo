@@ -30,6 +30,12 @@
                 <img src="/images/addition-sign.png">
             </button>
         </a>
+        <a href="/login">
+            <button type="button" class="btn btn-primary btn-lg">
+            <!--    ${model["resource"].getString("Add new competition")}-->
+                <img src="/images/add.png">
+            </button>
+        </a>
     </div>
 </nav>
 
@@ -63,6 +69,10 @@
         </tbody>
         </table>
 <!--
+
+
+
+
     <div class="add">
         <a href="addCompetition">
             <button type="button" class="btn btn-info btn-lg">${model["resource"].getString("Add new competition")}</button>
