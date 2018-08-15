@@ -16,16 +16,16 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.Id;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class HelloController {
 
-    private Logger LOG = LoggerFactory.getLogger(HelloController.class);
+    private final ResourceBundle resource = ResourceBundle.getBundle("kz.ivc.games.inter",
+            new Locale("ru"));
     @Autowired
     private final CompetitationRepo competitationRepo;
+    private Logger LOG = LoggerFactory.getLogger(HelloController.class);
 
     public HelloController(CompetitationRepo competitationRepo) {
         this.competitationRepo = competitationRepo;
@@ -35,8 +35,11 @@ public class HelloController {
 
     @GetMapping("/main")
     public String hello(@ModelAttribute("model") ModelMap model, @RequestParam(value = "name", required = false, defaultValue = "World") String name) {
-        List<Competition> competitionList = this.competitationRepo.findAll();
+        List<Competition> competitionList = this.competitationRepo.findAllByOrderByIdDesc();
         model.addAttribute("competitionList", competitionList);
+
+        model.addAttribute("resource",resource);
+
         return "main";
     }
 
@@ -45,10 +48,9 @@ public class HelloController {
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public String deleteCompetition(@PathVariable Long id) {
-        LOG.info("delete " + id);
         Competition competition = this.competitationRepo.getOne(id);
         this.competitationRepo.delete(competition);
-        return "redirect:/main";
+        return "redirect:/main2";
     }
 
 
@@ -59,13 +61,13 @@ public class HelloController {
     public String editCompetitionFormGet(@ModelAttribute("model") ModelMap model, @PathVariable Long id) {
         Competition competition = this.competitationRepo.getOne(id);
         model.put("competition", competition);
+        model.addAttribute("resource",resource);
         return "editCompetition";
     }
 
 
     @RequestMapping(value = {"/editCompetitionSave"}, method = RequestMethod.POST)
     public String competitionFormSubmit(Model model, Form form) {
-        LOG.info("competitionFormSubmit****");
         String id = form.getId();
         Long Rid = Long.parseLong(id);
         Competition competition = this.competitationRepo.getOne(Rid);
@@ -73,7 +75,7 @@ public class HelloController {
         if (name != null && name.length() > 0) {
             competition.setName(name);
             this.competitationRepo.save(competition);
-            return "redirect:/main";
+            return "redirect:/main2";
         } else {
             /*
             String error = "Name is required!";
@@ -85,7 +87,9 @@ public class HelloController {
     }
 
     //***********************************Add new Competition*******************************************************
-    public String addCompetitionFormGet(Model model) {
+    @GetMapping("/addCompetition")
+    public String addCompetitionFormGet(@ModelAttribute("model") ModelMap model) {
+        model.addAttribute("resource",resource);
         return "addCompetition";
     }
 
@@ -97,7 +101,7 @@ public class HelloController {
         if (name != null && name.length() > 0) {
             competition.setName(name);
             this.competitationRepo.save(competition);
-            return "redirect:/main";
+            return "redirect:/main2";
         } /*else {
             String error = "Name is required!";
             model.addAttribute("errorMessage", error);

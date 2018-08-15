@@ -1,66 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Hello</title>
-    <link rel="stylesheet" href="/bootstrap-3.3.7-dist/css/bootstrap.min.css">
-    <style type="text/css">
-        *{
-        font-family: Georgia, Times, serif;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+.collapsible {
+    background-color: #777;
+    color: white;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 2em;
+}
+
+.active, .collapsible:hover {
+    background-color: #555;
+}
+
+.content {
+    padding: 0 18px;
+    display: none;
+    overflow: hidden;
+    background-color: #f1f1f1;
+}
+</style>
+
 </head>
 <body>
-    <div class="container">
-        <h1>Competition list</h1>
-             <table  class="table">
-                    <thead class="active">
-                    <tr class="active" >
-                        <th  scope="col">#</th>
-                        <th  scope="col">Name</th>
-                        <th scope="col">Edit</th>
-                        <th scope="col">Delete</th>
-                        <th scope="col">Chose gamers</th>
-                        <th scope="col">Games</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        <#list model["competitionList"] as competition>
-                            <tr >
-                                <th>#</th>
-                                <th scope="row">${competition.name}</th>
+    <#list model["competitionList"] as competition>
+        <button class="collapsible">${competition.name}</button>
+        <div class="content">
+            <a href="/Competition/${competition.id}/showGames">
+                <button type="button" class="btn btn-primary">
+                    <img src="/images/scoreboard.png">
+                </button>
+            </a>
+            <a href="edit/${competition.id}">
+                <button type="button" class="btn btn-primary">
+                    <img src="/images/settings.png">
+                </button>
+            </a>
+        </div>
+    </#list>
 
-                                <th>
-                                    <a  href="edit/${competition.id}">
-                                        <button type="button" class="btn btn-success btn-md">Edit</button>
-                                    </a>
-                                </th>
+<script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
 
-                                <th>
-                                    <a href="delete/${competition.id}">
-                                        <button type="button" class="btn btn-danger btn-md">Delete</button>
-                                    </a>
-                                </th>
+for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+        if (content.style.display === "block") {
+            content.style.display = "none";
+        } else {
+            content.style.display = "block";
+        }
+    });
+}
+</script>
 
-                                <th>
-                                    <a href="competition/${competition.id}">
-                                        <button type="button" class="btn btn-warning btn-md">Gamers</button>
-                                    </a>
-                                </th>
-
-                                <th>
-                                    <a href="competition/${competition.id}">
-                                        <button type="button" class="btn btn-warning btn-md">Games</button>
-                                    </a>
-                                </th>
-                            </tr>
-                        </#list>
-                    </tbody>
-                </table>
-        <a href="addCompetition">
-            <button type="button" class="btn btn-primary btn-lg">Add new competition</button>
-        </a>
-    </div>
-    <!--<script src="resources/static/bootstrap-3.3.7/js/bootstrap.min.js"></script>-->
 </body>
 </html>
+

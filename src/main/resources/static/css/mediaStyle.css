@@ -8,9 +8,8 @@ width:90.5%;
    .col1{
         width:60%;
         }
-  .table-bordered{
-  font-size:0.5em;
-  }
+
+
    th
    {
      padding: 5px;
@@ -27,6 +26,12 @@ width:90.5%;
      white-space: nowrap;
 
    }
+   .rotate{
+     font-size:1em;
+     padding:0 0.2rem 0 0.2rem;
+     margin: 0 0.2rem 0 0.2rem;
+   }
+
 }
 
 /* Small devices (portrait tablets and large phones, 600px and up) */

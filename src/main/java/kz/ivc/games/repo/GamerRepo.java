@@ -16,10 +16,6 @@ import java.util.List;
 
 @Repository
 public interface GamerRepo extends JpaRepository<Gamer, Long> {
-    //List <Gamer> findId(Long id);
-
-    /*@Query("SELECT gamer.nick FROM Gamer as gamer ")
-    List<Gamer> findNameById(long id);*/
 
 }
 
