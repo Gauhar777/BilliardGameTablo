@@ -30,6 +30,11 @@ public class CompititionController {
             this.competitationRepo = competitationRepo;
         }
 
+        @GetMapping("/home")
+        public String myHome(){
+            return "home";
+        }
+
         //***********************************Show Competition*******************************************************
 
         @GetMapping("/main2")

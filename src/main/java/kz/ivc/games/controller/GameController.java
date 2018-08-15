@@ -64,14 +64,14 @@ public class GameController {
             agrPoint1 = 0;  // salgan sharlar sany
             agrPoint2 = 0;  // jibergen sharlar sany
 
-        //*********По партнерам найтти имена играков1
+            //*********По партнерам найтти имена играков1
             ResultDTO resultDTO = new ResultDTO();
             Gamer gamer1 = this.gamerRepo.getOne(partner1.getIdGamer());
             resultDTO.setId(gamer1.getId());
             resultDTO.setNick(gamer1.getNick());
 
 
-        // ********Игрок2
+            // ********Игрок2
             List<ResultGameDTO> resultGameDTOS = new ArrayList<>();
 
             for (Partner partner2 : partnerList) {
@@ -79,27 +79,19 @@ public class GameController {
 
                 if (partner1.getId() != partner2.getId()) {
 
-                //******Create game where play Gamer1 and Gamer2
+                    //******Create game where play Gamer1 and Gamer2
                     Game game=this.gameRepo.findByIdPartner1AndIdPartner2AndIdCompetition(partner1.getId(), partner2.getId(), idCompetition);
                     Game gameMirror = this.gameRepo.findByIdPartner1AndIdPartner2AndIdCompetition(partner2.getId(), partner1.getId(), idCompetition);
-                    if(game == null) {
-                        if (gameMirror==null) {
-                            Game newGame = new Game();
-                            newGame.setIdCompetition(idCompetition);
-                            newGame.setIdPartner1(partner1.getId());
-                            newGame.setIdPartner2(partner2.getId());
-                            newGame.setPoint1(0L);
-                            newGame.setPoint2(0L);
-                            this.gameRepo.save(newGame);
-                        }
-                    }
 
-                //***********Game
+
+                    //***********Game
                     if (game != null) {
                         resultGameDTO.setId(game.getId());
 
                         Gamer gamer2 = this.gamerRepo.getOne(partner2.getIdGamer());
                         resultGameDTO.setNick(gamer2.getNick());
+                        resultGameDTO.setId(game.getId());
+                        resultGameDTO.setIdGamer(gamer2.getId());
                         resultGameDTO.setIdCompetition(idCompetition);
                         resultGameDTO.setPoint1(game.getPoint1());
                         resultGameDTO.setPoint2(game.getPoint2());
@@ -130,6 +122,12 @@ public class GameController {
                             if (gameMirror.getPoint2() > gameMirror.getPoint1()) {
                                 ++agrBall;
                             }
+                        }else{
+                            //resultGameDTO.setNick(gamer2.getNick());
+                            //resultGameDTO.setId(newGame.getId());
+                            resultGameDTO.setIdGamer(partner2.getIdGamer());
+                            resultGameDTO.setNick(gamer1.getNick());
+                            resultGameDTO.setIdCompetition(idCompetition);
                         }
                     }
                 } else {
@@ -151,70 +149,51 @@ public class GameController {
           );
          */
 
-
-
             resultDTO.setGameList(resultGameDTOS);
-
+            LOG.info("*****this is gameList"+resultGameDTOS);
             resultDTOList.add(resultDTO);
-
         }
-       //******* sort by deference and agrBall
-       resultDTOList.sort(Comparator.comparing(ResultDTO::getAgrBall)
-            .reversed()
-            .thenComparing(Comparator.comparing(ResultDTO::getDeference)
-            .reversed()) );
 
-       model.addAttribute("results", resultDTOList);
+        //******* sort by deference and agrBall
+        resultDTOList.sort(Comparator.comparing(ResultDTO::getAgrBall)
+                .reversed()
+                .thenComparing(Comparator.comparing(ResultDTO::getDeference)
+                .reversed()) );
+        LOG.info("***********************1");
+        for (ResultDTO resultDTO : resultDTOList) {
+            LOG.info(resultDTO.getNick());
+            for (ResultGameDTO dto : resultDTO.getGameList()) {
+                LOG.info("     "+dto.getNick() + " " + dto.getId() + " " + dto.getIdGamer());
+            }
+        }
+        LOG.info("***********************2");
+        for (ResultDTO resultDTO : resultDTOList) {
+            resultDTO.getGameList().sort((o1, o2) -> {
+                int answer=0;
+                if (o1.getIdGamer()!=o2.getIdGamer()) {
+                    for (ResultDTO resultDTO3 : resultDTOList) {
+                        if (resultDTO3.getId() == o1.getIdGamer()) {
+                            answer = -1;
+                            break;
+                        }
+                        if (resultDTO3.getId() == o2.getIdGamer()) {
+                            answer = 1;
+                            break;
+                        }
+                    }
+                }
+                return answer;
+            });
+            LOG.info("***********************3");
+            for (ResultGameDTO dto : resultDTO.getGameList()) {
+                LOG.info(dto.getNick()+" "+dto.getId()+" "+dto.getIdGamer());
+            }
+        }
+
+        model.addAttribute("results", resultDTOList);
         return "games";
-
     }
 
 
-    //*********************************************Add points********************************************
 
-    @RequestMapping(value = "/{idC}/{idG}/addPoint", method = RequestMethod.GET)
-    public String addPointFormGet(@ModelAttribute("model") ModelMap model, @PathVariable Long idG,  @PathVariable Long idC) {
-
-        Game game = this.gameRepo.getOne(idG);
-        model.addAttribute("resource",resource);
-        model.put("game", game);
-
-        Long idPartner1=game.getIdPartner1();
-        Long idPartner2=game.getIdPartner2();
-
-        Partner partner1=this.partnerRepo.getOne(idPartner1);
-        Partner partner2=this.partnerRepo.getOne(idPartner2);
-
-        Long idGamer1=partner1.getIdGamer();
-        Long idGamer2=partner2.getIdGamer();
-
-        Gamer gamer1=this.gamerRepo.getOne(idGamer1);
-        Gamer gamer2=this.gamerRepo.getOne(idGamer2);
-
-        Competition competition = this.competitationRepo.getOne(idC);
-        model.put("competition",competition);
-
-        model.put("gamer1",gamer1);
-        model.put("gamer2",gamer2);
-        return "addPoint";
-    }
-
-
-    @RequestMapping(value = {"/{idC}/{idG}/addPoint"}, method = RequestMethod.POST)
-    public String gameFormSubmit(@ModelAttribute("model") ModelMap model,  GameForm gameForm,Game game,@PathVariable Long idG,Long idC) {
-
-        long rId=Long.parseLong(String.valueOf(idG));
-        game = this.gameRepo.getOne(rId);
-
-        String point1 = gameForm.getPoint1();
-        String point2 = gameForm.getPoint2();
-        if ((point1 != null && point2 != null) && (point1.length() > 0 && point2.length() > 0)) {
-            game.setPoint1(Long.parseLong(point1));
-            game.setPoint2(Long.parseLong(point2));
-            this.gameRepo.save(game);
-            return "redirect:/Competition/{idC}/showGames";
-        }
-        return "redirect:/editGameSave";
-
-    }
 }
