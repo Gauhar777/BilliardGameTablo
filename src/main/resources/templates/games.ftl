@@ -46,13 +46,13 @@
             <#list model["results"] as result>
                     <tr>
                         <th ><span class="rotate">${result.nick}</span></th>
-                            <#list result.gameList as gamer2>
+                            <#list result.gameList as game>
                         <td>
-                                <#if result.id==gamer2.idGamer>
+                                <#if result.id==game.idGamer>
                                     -
                                 <#else>
-                                    <a href="/${gamer2.idCompetition}/${gamer2.id}/addPoint">
-                                        ${gamer2.point1}:${gamer2.point2}
+                                    <a href="/${game.idCompetition}/${result.id}/${game.idGamer}/point">
+                                        ${game.point1}:${game.point2}
                                     </a>
                                 </#if>
                         </td>
