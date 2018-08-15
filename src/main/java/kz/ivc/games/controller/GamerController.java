@@ -2,14 +2,8 @@ package kz.ivc.games.controller;
 
 import kz.ivc.games.dto.GamerForm;
 import kz.ivc.games.dto.GamerOfCompetition;
-import kz.ivc.games.entity.Competition;
-import kz.ivc.games.entity.Game;
-import kz.ivc.games.entity.Gamer;
-import kz.ivc.games.entity.Partner;
-import kz.ivc.games.repo.CompetitationRepo;
-import kz.ivc.games.repo.GameRepo;
-import kz.ivc.games.repo.GamerRepo;
-import kz.ivc.games.repo.PartnerRepo;
+import kz.ivc.games.entity.*;
+import kz.ivc.games.repo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,26 +32,27 @@ public class GamerController {
     private final CompetitationRepo competitationRepo;
     @Autowired
     private PartnerRepo partnerRepo;
+    private DezhurnyRepo dezhurnyRepo;
 
-    public GamerController(GamerRepo gamerRepo,GameRepo gameRepo, CompetitationRepo competitationRepo) {
+    public GamerController(GamerRepo gamerRepo,GameRepo gameRepo,PartnerRepo partnerRepo, CompetitationRepo competitationRepo,DezhurnyRepo dezhurnyRepo) {
         this.gamerRepo = gamerRepo;
         this.gameRepo = gameRepo;
         this.competitationRepo = competitationRepo;
         this.partnerRepo=partnerRepo;
+        this.dezhurnyRepo=dezhurnyRepo;
     }
 
     /*    @GetMapping("/gamers")
         public String gamers(@ModelAttribute("model") ModelMap model) {
             List<Gamer> gamerList = this.gamerRepo.findAll();
             model.addAttribute("gamers", gamerList);
-
             return "gamers";
         }
     */
 
     //***************************************************ShowGamers*********************************
     @RequestMapping(value = "/competition/{idCompetition}/addGamers", method = RequestMethod.GET)
-    public String signInCompetitionFormGet(@ModelAttribute("model") ModelMap model, GamerForm gamerForm,@PathVariable Long idCompetition,Long idG) {
+    public String signInCompetitionFormGet(@ModelAttribute("model") ModelMap model, GamerForm gamerForm,@PathVariable Long idCompetition) {
         Competition competition = this.competitationRepo.getOne(idCompetition);
         model.put("competition", competition);
 
@@ -76,6 +71,12 @@ public class GamerController {
                 gamerOfCompetition.setChoosed(true);
             }else{
                 gamerOfCompetition.setChoosed(false);
+            }
+            Dezhurny dezhurny=this.dezhurnyRepo.findByIdCompetitionAndIdGamer(idCompetition,gamer.getId());
+            if(dezhurny!=null){
+                gamerOfCompetition.setDezhuril(true);
+            }else{
+                gamerOfCompetition.setDezhuril(false);
             }
             answer.add(gamerOfCompetition);
         }
@@ -124,7 +125,7 @@ public class GamerController {
         return "redirect:/competition/{idC}/addGamers";
     }
 
-        //*********************************************************NewGamer*******************************************
+    //*********************************************************NewGamer*******************************************
     @GetMapping("{idC}/addGamers")
     public String formGet(@ModelAttribute("model") ModelMap model,@PathVariable Long idC) {
         Competition competition = this.competitationRepo.getOne(idC);
@@ -140,9 +141,7 @@ public class GamerController {
 
 
     @RequestMapping(value = {"{idC}/addGamers"}, method = RequestMethod.POST)
-    public String gamersSave(@PathVariable Long idC, @ModelAttribute("model") ModelMap model, GamerForm gamersForm) {
-
-
+    public String gamersSave(@PathVariable Long idC, GamerForm gamersForm) {
         Gamer gamer = new Gamer();
         String FIO = gamersForm.getFIO();
         String nick = gamersForm.getNick();
@@ -159,12 +158,31 @@ public class GamerController {
 
     //***********************************************Delete********************************************
     @RequestMapping(value = "/{idC}/deleteGamer/{id}", method = RequestMethod.GET)
-    public String deleteGamer(@PathVariable Long id,@PathVariable Long idC,@ModelAttribute("model") ModelMap model) {
+    public String deleteGamer(@PathVariable Long id,@PathVariable Long idC) {
         Gamer gamer = this.gamerRepo.getOne(id);
         this.gamerRepo.delete(gamer);
 
         return "redirect:/competition/{idC}/addGamers";
     }
+    //***********************************************Dezhurny********************************************
 
+    @RequestMapping(value = "{idC}/{idGamer}/dezhurit", method = RequestMethod.GET)
+    public String dezhuritGamer( @PathVariable Long idC,@PathVariable Long idGamer ) {
+        Dezhurny dezhurny=new Dezhurny();
+        dezhurny.setIdCompetition(idC);
+        dezhurny.setIdGamer(idGamer);
+        this.dezhurnyRepo.save(dezhurny);
+        return "redirect:/competition/{idC}/addGamers";
+    }
+
+
+
+    @RequestMapping(value = "{idC}/{idGamer}/cancellDezhurny", method = RequestMethod.GET)
+    public String deleteDezhurny( @PathVariable Long idC,@PathVariable Long idGamer ) {
+        Dezhurny dezhurny=this.dezhurnyRepo.findByIdCompetitionAndIdGamer(idC,idGamer);
+        this.dezhurnyRepo.delete(dezhurny);
+
+        return "redirect:/competition/{idC}/addGamers";
+    }
 
 }
