@@ -26,11 +26,18 @@ public class Game {
     @Column(name = "id_competition")
     private Long idCompetition;
 
-    @Column
+    @Column(name = "point1")
     private Long point1;
 
-    @Column
+    @Column(name = "point2")
     private Long point2;
 
 
+    public Long getIdPartner2() {
+        return idPartner2;
+    }
+
+    public void setIdPartner2(Long idPartner2) {
+        this.idPartner2 = idPartner2;
+    }
 }
