@@ -56,8 +56,12 @@
                                 <#if result.id==game.idGamer>
                                     -
                                 <#else>
-                                    <a href="/${game.idCompetition}/${result.id}/${game.idGamer}/point">
+                                    <#if isAuthenticated==true>
+                                        <a href="/${game.idCompetition}/${result.id}/${game.idGamer}/point">
                                         ${game.point1}:${game.point2}
+                                        <#else>
+
+
                                     </a>
                                 </#if>
                         </td>
