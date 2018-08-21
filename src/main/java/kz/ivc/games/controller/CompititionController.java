@@ -5,28 +5,33 @@ import kz.ivc.games.repo.CompetitationRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 @Controller
 public class CompititionController {
-    @Controller
-    public class HelloController {
 
         private Logger LOG = LoggerFactory.getLogger(kz.ivc.games.controller.HelloController.class);
+
         private final ResourceBundle resource = ResourceBundle.getBundle("kz.ivc.games.inter",
                 new Locale("ru"));
+
         @Autowired
         private final CompetitationRepo competitationRepo;
 
-        public HelloController(CompetitationRepo competitationRepo) {
+        public CompititionController(CompetitationRepo competitationRepo) {
             this.competitationRepo = competitationRepo;
         }
 
@@ -35,17 +40,33 @@ public class CompititionController {
             return "home";
         }
 
-        //***********************************Show Competition*******************************************************
+    @GetMapping("/error")
+    public String myError(){
+        return "error";
+    }
 
-        @GetMapping("/main2")
-        public String hello(@ModelAttribute("model") ModelMap model, @RequestParam(value = "name", required = false, defaultValue = "World") String name) {
+    //***********************************Show Competition*******************************************************
+
+    @RequestMapping(value = "/main2", method = {RequestMethod.GET,RequestMethod.POST})
+    public ModelAndView main2(Model model, final HttpServletRequest request) {
             List<Competition> competitionList = this.competitationRepo.findAll();
             model.addAttribute("competitionList", competitionList);
 
             model.addAttribute("resource", resource);
 
-            return "listCompetition";
-        }
-    }
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String userName = authentication.getName();
+            LOG.info("userName="+userName+" "+authentication.isAuthenticated());
+            model.addAttribute("isAuthenticated",!userName.equals("anonymousUser"));
 
-    }
+            return new ModelAndView("listCompetition","model",model);
+        }
+
+        @RequestMapping(value = "/loginpage", method = RequestMethod.GET)
+        public ModelAndView getLoginPage(@RequestParam Optional<String> error) {
+            LOG.info("Getting login page, error={}", error);
+            return new ModelAndView("login", "error", error);
+        }
+
+
+}

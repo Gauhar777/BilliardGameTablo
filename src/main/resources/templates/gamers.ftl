@@ -86,7 +86,7 @@
                     <img src="/images/addition.png">
                 </button>
             </a>
-            <#else>
+        <#else>
             <a href="/${model.competition.id}/${answer.idGamer}/excludePartner">
                 <button type="button" class="btn btn-danger">
                     <!--   ${model["resource"].getString("Exclude")}-->
