@@ -42,7 +42,12 @@
                 <img src="/images/scoreboard.png">
             </button>
         </a>
-    </div>
+            <a href="/logout">
+                <button type="button" class="btn btn-primary btn-lg">
+                    <img src="/images/sign-out.png">
+                </button>
+            </a>
+        </div>
 </nav>
 <!--
      <h1 class="text-info">${model["resource"].getString("Choose gamers for competition")} : <b class="text-info">${model.competition.name}</b></h1>

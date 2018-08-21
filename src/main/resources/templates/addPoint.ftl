@@ -22,6 +22,13 @@
                     </a>
                 </li>
             </ul>
+        <div>
+            <a href="/logout">
+                <button type="button" class="btn btn-primary btn-lg">
+                    <img src="/images/sign-out.png">
+                </button>
+            </a>
+        </div>
     </nav>
 
     <div class="container">

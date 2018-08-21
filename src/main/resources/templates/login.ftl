@@ -3,23 +3,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>Log in</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/myStyle.css">
+    <link rel="stylesheet" href="/css/mediaStyle.css">
+    <link rel="stylesheet" href="/css/navBarStyle.css">
 </head>
 <body>
-
-<h1>Log in</h1>
-
-<form method="post">
-    <div>
-        <label for="username">username</label>
-        <input name="username" id="username" required autofocus/>
+    <div class="container">
+        <h1>Log in</h1>
+        <form method="POST">
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label" for="username">Username</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" name="username" id="username" required autofocus/>
+                    </div>
+            </div>
+            <div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label" for="password">Password</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" type="password" name="password" id="password" required/>
+                        </div>
+                </div>
+            <button type="submit" class="btn btn-primary btn-lg" >Sign in</button>
+        </form>
     </div>
-    <div>
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" required/>
-    </div>
-    <button type="submit">Sign in</button>
-</form>
 </body>
 </html>

@@ -31,13 +31,27 @@
                 </button>
             </a>
         </#if>
-        <a href="/loginpage">
-            <button type="button" class="btn btn-primary btn-lg">
-            <!--    ${model["resource"].getString("Add new competition")}-->
-                <img src="/images/add.png">
-            </button>
-        </a>
+        <#if isAuthenticated==false>
+            <a href="/loginpage">
+                <button type="button" class="btn btn-primary btn-lg">
+                <!--    ${model["resource"].getString("Add new competition")}-->
+                    <img src="/images/add.png">
+                </button>
+            </a>
+        <#else>
+            <a href="/logout">
+                <button type="button" class="btn btn-primary btn-lg">
+                    <img src="/images/sign-out.png">
+              </button>
+            </a>
+        </#if>
+    <a href="/logout">
+        <button type="button" class="btn btn-primary btn-lg">
+            <img src="/images/sign-out.png">
+        </button>
+    </a>
     </div>
+
 </nav>
 
     <table class="table table-striped table-borderless">
