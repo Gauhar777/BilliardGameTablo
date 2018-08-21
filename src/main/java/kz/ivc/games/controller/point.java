@@ -10,9 +10,14 @@ import kz.ivc.games.repo.GameRepo;
 import kz.ivc.games.repo.GamerRepo;
 import kz.ivc.games.repo.PartnerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 @Controller
 public class point {
@@ -21,6 +26,8 @@ public class point {
     private GamerRepo gamerRepo;
     private CompetitationRepo competitionRepo;
     private PartnerRepo partnerRepo;
+    private final ResourceBundle resource = ResourceBundle.getBundle("kz.ivc.games.inter",
+            new Locale("ru"));
 
     public point(GameRepo gameRepo,GamerRepo gamerRepo, CompetitationRepo competitionRepo,PartnerRepo partnerRepo){
         this.gamerRepo = gamerRepo;
@@ -33,11 +40,19 @@ public class point {
     public String getPointPage (@ModelAttribute("model") ModelMap model, @PathVariable Long idC,@PathVariable Long idG1,@PathVariable Long idG2){
         //**************************Gamers**********************************
         Competition competition=this.competitionRepo.findOne(idC);
-
         Gamer gamer1=this.gamerRepo.getOne(idG1);
         Gamer gamer2=this.gamerRepo.getOne(idG2);
         model.put("gamer1",gamer1);
         model.put("gamer2",gamer2);
+        model.put("competition",competition);
+        model.addAttribute("resource", resource);
+
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      String userName = authentication.getName();
+
+      model.put("isAuthenticated",!userName.equals("anonymousUser"));
+
+
 /*
         Partner partner1=this.partnerRepo.findByIdCompetitionAndIdGamer(idC,idG1);
         Partner partner2=this.partnerRepo.findByIdCompetitionAndIdGamer(idC,idG2);

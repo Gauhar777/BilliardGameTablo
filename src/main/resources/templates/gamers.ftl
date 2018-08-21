@@ -57,6 +57,7 @@
 <table class="table table-striped table-borderless">
     <th  scope="col">${model["resource"].getString("FIO")}</th>
     <th  scope="col">${model["resource"].getString("Nick")}</th>
+    <th> </th>
     <#list model["answers"] as answer>
     <tr>
         <td class="gamerI">${answer.FIO} </td>
@@ -73,11 +74,12 @@
             <a href="/${model.competition.id}/${answer.idGamer}/dezhurit">
                 <button type="button" class="btn btn-primary">
                     <!--${model["resource"].getString("Choose")}-->
+                    <img src="/images/timer.png">
                 </button>
             </a>
             <#else>
             <a href="/${model.competition.id}/${answer.idGamer}/cancellDezhurny">
-                <button type="button" class="btn btn-primary">
+                <button type="button" class="btn btn-success">
                     <!--   ${model["resource"].getString("Exclude")}-->
                     <img src="/images/done.png">
                 </button>

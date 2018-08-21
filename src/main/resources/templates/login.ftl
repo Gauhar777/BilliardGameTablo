@@ -11,23 +11,39 @@
     <link rel="stylesheet" href="/css/navBarStyle.css">
 </head>
 <body>
+<nav class="navbar navbar-dark navbar-expand">
+
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a class="nav-link"  href="/main2">
+                ${model["resource"].getString("Competition")}
+                <span class="sr-only">(current)</span>
+            </a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link"  href="#">
+                ${model["resource"].getString("Sign in")}
+                <span class="sr-only">(current)</span>
+            </a>
+        </li>
+    </ul>
+</nav>
     <div class="container">
-        <h1>Log in</h1>
+        <h1>${model["resource"].getString("Sign in")}</h1>
         <form method="POST">
             <div class="form-group row">
-                <label class="col-sm-2 col-form-label" for="username">Username</label>
+                <label class="col-sm-2 col-form-label" for="username">${model["resource"].getString("User name")}</label>
                     <div class="col-sm-10">
                         <input class="form-control" name="username" id="username" required autofocus/>
                     </div>
             </div>
-            <div>
-                <div class="form-group row">
-                    <label class="col-sm-2 col-form-label" for="password">Password</label>
+            <div class="form-group row">
+                    <label class="col-sm-2 col-form-label" for="password">${model["resource"].getString("Password")}</label>
                         <div class="col-sm-10">
                             <input class="form-control" type="password" name="password" id="password" required/>
                         </div>
-                </div>
-            <button type="submit" class="btn btn-primary btn-lg" >Sign in</button>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg" >${model["resource"].getString("signin")}</button>
         </form>
     </div>
 </body>
