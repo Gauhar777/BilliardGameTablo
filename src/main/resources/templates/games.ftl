@@ -9,68 +9,71 @@
     <link rel="stylesheet" href="/css/navBarStyle.css">
 </head>
 <body>
-<nav class="navbar navbar-dark navbar-expand">
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-            <a  class="nav-link" href="/main2">
-                ${model["resource"].getString("Competition")}
-                <span class="sr-only">(current)</span>
-            </a>
-        </li>
-        <li class="nav-item active">
-            <a  class="nav-link" href="#">
-                ${model["resource"].getString("Game")}
-                <span class="sr-only">(current)</span>
-            </a>
-        </li>
-    </ul>
-    <div>
-            <a href="/competition/${model.competition.id}/addGamers">
-                <button type="button" class="btn btn-primary btn-lg">
-                    <!--    ${model["resource"].getString("Add new competition")}-->
-                    <img src="/images/add.png">
-                </button>
-            </a>
-            <a href="/logout">
-                <button type="button" class="btn btn-primary btn-lg">
-                    <img src="/images/sign-out.png">
-                </button>
-            </a>
-        </div>
+    <#assign isAuthenticated = model["isAuthenticated"] />
+    <nav class="navbar navbar-dark navbar-expand">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a  class="nav-link" href="/main2">
+                    ${model["resource"].getString("Competition")}
+                    <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item active">
+                <a  class="nav-link" href="#">
+                    ${model["resource"].getString("Game")}
+                    <span class="sr-only">(current)</span>
+                </a>
+            </li>
+        </ul>
+        <div>
+                <#if isAuthenticated==true>
+                    <a href="/competition/${model.competition.id}/addGamers">
+                        <button type="button" class="btn btn-primary btn-lg">
+                            <!--    ${model["resource"].getString("Add new competition")}-->
+                            <img src="/images/add.png">
+                        </button>
+                    </a>
+                    <a href="/logout">
+                        <button type="button" class="btn btn-primary btn-lg">
+                            <img src="/images/sign-out.png">
+                        </button>
+                    </a>
+                </#if>
+            </div>
     </nav>
 
-<div>
-    <table class="table table-bordered">
-            <th class="a"> <span class="rotate">${model["resource"].getString("Gamers")}</span></th>
-            <#list model["results"] as result>
-            <th class="a"><span class="rotate">${result.nick}</span> </th>
-            </#list>
-            <th class="a"><span class="rotate">${model["resource"].getString("Score")}</span> </th>
-            <th class="a"><span class="rotate">${model["resource"].getString("Deference")}</span></th>
-            <!--table body-->
-            <#list model["results"] as result>
-                    <tr>
-                        <th ><span class="rotate">${result.nick}</span></th>
-                            <#list result.gameList as game>
-                        <td>
-                                <#if result.id==game.idGamer>
-                                    -
-                                <#else>
-                                    <#if isAuthenticated==true>
-                                        <a href="/${game.idCompetition}/${result.id}/${game.idGamer}/point">
-                                        ${game.point1}:${game.point2}
+    <div>
+        <table class="table table-bordered">
+                <th class="a"> <span class="rotate">${model["resource"].getString("Gamers")}</span></th>
+                <#list model["results"] as result>
+                <th class="a"><span class="rotate">${result.nick}</span> </th>
+                </#list>
+                <th class="a"><span class="rotate">${model["resource"].getString("Score")}</span> </th>
+                <th class="a"><span class="rotate">${model["resource"].getString("Deference")}</span></th>
+                <!--table body-->
+                <#list model["results"] as result>
+                        <tr>
+                            <th ><span class="rotate">${result.nick}</span></th>
+                                <#list result.gameList as game>
+                                    <td>
+                                        <#if result.id==game.idGamer>
+                                            -
                                         <#else>
-
-
-                                    </a>
-                                </#if>
-                        </td>
-                            </#list>
-                        <td> ${result.agrBall}</td>
-                        <td> ${result.deference}</td>
-                    </tr>
-            </#list>
-    </table>
+                                            <#if isAuthenticated==true>
+                                                <a href="/${game.idCompetition}/${result.id}/${game.idGamer}/point">
+                                                    ${game.point1}:${game.point2}
+                                                </a>
+                                             <#else>
+                                                <div>${game.point1}:${game.point2}</div>
+                                            </#if>
+                                        </#if>
+                                    </td>
+                                </#list>
+                            <td> ${result.agrBall}</td>
+                            <td> ${result.deference}</td>
+                        </tr>
+                </#list>
+        </table>
     </div>
 </body>
 </html>

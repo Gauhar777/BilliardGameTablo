@@ -35,7 +35,7 @@
             <a href="/loginpage">
                 <button type="button" class="btn btn-primary btn-lg">
                 <!--    ${model["resource"].getString("Add new competition")}-->
-                    <img src="/images/add.png">
+                    <img src="/images/sign-in.png">
                 </button>
             </a>
         <#else>

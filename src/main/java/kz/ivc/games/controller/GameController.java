@@ -15,11 +15,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.ResultSet;
 import java.util.*;
 
@@ -46,8 +49,15 @@ public class GameController {
     //***********************************GameCompetition*******************************************************
 
     @RequestMapping(value = "/Competition/{idCompetition}/showGames", method = RequestMethod.GET)
-    public String showGame(@ModelAttribute("model") ModelMap model, @PathVariable Long idCompetition) {
+    public String showGame(@ModelAttribute("model") ModelMap model, @PathVariable Long idCompetition,final HttpServletRequest request) {
         model.addAttribute("resource",resource);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+        LOG.info("userName="+userName+" "+authentication.isAuthenticated());
+        model.put("isAuthenticated",!userName.equals("anonymousUser"));
+
+
 
         Competition competition = this.competitationRepo.getOne(idCompetition);
         model.put("competition", competition);
