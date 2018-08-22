@@ -36,21 +36,22 @@ public class point {
         this.partnerRepo = partnerRepo;
     }
 
-  @RequestMapping(value = "{idC}/{idG1}/{idG2}/point",method = RequestMethod.GET)
+    @RequestMapping(value = "{idC}/{idG1}/{idG2}/point",method = RequestMethod.GET)
     public String getPointPage (@ModelAttribute("model") ModelMap model, @PathVariable Long idC,@PathVariable Long idG1,@PathVariable Long idG2){
         //**************************Gamers**********************************
         Competition competition=this.competitionRepo.findOne(idC);
         Gamer gamer1=this.gamerRepo.getOne(idG1);
         Gamer gamer2=this.gamerRepo.getOne(idG2);
+
         model.put("gamer1",gamer1);
         model.put("gamer2",gamer2);
         model.put("competition",competition);
         model.addAttribute("resource", resource);
 
-      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-      String userName = authentication.getName();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
 
-      model.put("isAuthenticated",!userName.equals("anonymousUser"));
+        model.put("isAuthenticated",!userName.equals("anonymousUser"));
 
 
 /*
@@ -79,31 +80,38 @@ public class point {
     }
 
     @RequestMapping(value = "{idC}/{idG1}/{idG2}/point",method = RequestMethod.POST)
-    public String setPointPage (@ModelAttribute("model") ModelMap model, @PathVariable Long idC,@PathVariable Long idG1,@PathVariable Long idG2,GameForm gameForm) {
+    public String setPointPage (@ModelAttribute("model") ModelMap model, @PathVariable Long idC,
+                                @PathVariable Long idG1,@PathVariable Long idG2,
+                                @ModelAttribute("employee") GameForm gameForm) {
         Partner partner1=this.partnerRepo.findByIdCompetitionAndIdGamer(idC,idG1);
         Partner partner2=this.partnerRepo.findByIdCompetitionAndIdGamer(idC,idG2);
-        System.out.println("////////"+partner1);
+        System.out.println("////////"+partner1+" "+gameForm.getPoint1());
         System.out.println("\\\\\\\\"+partner2);
 
         Long idPartner1=partner1.getId();
         Long idPartner2=partner2.getId();
 
-        Game thisGame=null;
         Game game=this.gameRepo.findByIdPartner1AndIdPartner2AndIdCompetition(idPartner1,idPartner2,idC);
         Game gameMirror=this.gameRepo.findByIdPartner1AndIdPartner2AndIdCompetition(idPartner2,idPartner1,idC);
         if (game==null && gameMirror==null) {
             Game newGame = new Game();
-            newGame.setIdPartner1(1L);
-            newGame.setIdPartner2(2L);
+            newGame.setIdPartner1(idPartner1);
+            newGame.setIdPartner2(idPartner2);
             newGame.setIdCompetition(Long.parseLong(String.valueOf(idC)));
+            newGame.setPoint1(Long.parseLong(gameForm.getPoint1()));
+            newGame.setPoint2(Long.parseLong(gameForm.getPoint2()));
             this.gameRepo.save(newGame);
         }else if (game!=null) {
-            thisGame=game;
+            game.setPoint1(Long.parseLong(gameForm.getPoint1()));
+            game.setPoint2(Long.parseLong(gameForm.getPoint2()));
+            this.gameRepo.save(game);
+
         }else {
-            thisGame=gameMirror;
+            gameMirror.setPoint1(Long.parseLong(gameForm.getPoint1()));
+            gameMirror.setPoint2(Long.parseLong(gameForm.getPoint2()));
+            this.gameRepo.save(gameMirror);
         }
 
-        System.out.println("************************"+thisGame);
         return "redirect:/Competition/{idC}/showGames";
     }
 

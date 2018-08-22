@@ -1,4 +1,3 @@
-CREATE TABLE `user` (id int(11) NOT NULL AUTO_INCREMENT, username int(11) NOT NULL, password char(255) NOT NULL, passwordconfirm char(255) NOT NULL, PRIMARY KEY (id));
 CREATE TABLE dezhurny (id int(11) NOT NULL AUTO_INCREMENT, id_gamer int(11) NOT NULL, time timestamp, id_competition int(11), PRIMARY KEY (id));
 CREATE TABLE partner (id int(11) NOT NULL AUTO_INCREMENT, id_gamer int(10) NOT NULL, id_competition int(10) NOT NULL, PRIMARY KEY (id));
 CREATE TABLE competition (id int(10) NOT NULL AUTO_INCREMENT, name varchar(255), dezhurnyid int(11), PRIMARY KEY (id));

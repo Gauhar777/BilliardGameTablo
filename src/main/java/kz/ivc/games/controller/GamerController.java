@@ -52,7 +52,8 @@ public class GamerController {
 
     //***************************************************ShowGamers*********************************
     @RequestMapping(value = "/competition/{idCompetition}/addGamers", method = RequestMethod.GET)
-    public String signInCompetitionFormGet(@ModelAttribute("model") ModelMap model, GamerForm gamerForm,@PathVariable Long idCompetition) {
+    public String signInCompetitionFormGet(@ModelAttribute("model") ModelMap model,
+                                           GamerForm gamerForm,@PathVariable Long idCompetition) {
         Competition competition = this.competitationRepo.getOne(idCompetition);
         model.put("competition", competition);
 
@@ -141,7 +142,7 @@ public class GamerController {
 
 
     @RequestMapping(value = {"{idC}/addGamers"}, method = RequestMethod.POST)
-    public String gamersSave(@PathVariable Long idC, GamerForm gamersForm) {
+    public String gamersSave(@PathVariable Long idC,@ModelAttribute("gamersForm") GamerForm gamersForm) {
         Gamer gamer = new Gamer();
         String FIO = gamersForm.getFIO();
         String nick = gamersForm.getNick();
