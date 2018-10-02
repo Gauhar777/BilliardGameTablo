@@ -62,12 +62,17 @@ public class CompititionController {
             return new ModelAndView("listCompetition","model",model);
         }
 
+
+
+
+
+
         @RequestMapping(value = "/loginpage", method = {RequestMethod.GET,RequestMethod.POST})
         public ModelAndView getLoginPage(@RequestParam Optional<String> error,@ModelAttribute("model") ModelMap model) {
+
             model.addAttribute("resource", resource);
 
             return new ModelAndView("login", "error", error);
-
         }
 
 
