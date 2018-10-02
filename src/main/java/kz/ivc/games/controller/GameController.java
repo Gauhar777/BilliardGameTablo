@@ -3,14 +3,8 @@ package kz.ivc.games.controller;
 import kz.ivc.games.dto.GameForm;
 import kz.ivc.games.dto.ResultDTO;
 import kz.ivc.games.dto.ResultGameDTO;
-import kz.ivc.games.entity.Competition;
-import kz.ivc.games.entity.Game;
-import kz.ivc.games.entity.Gamer;
-import kz.ivc.games.entity.Partner;
-import kz.ivc.games.repo.CompetitationRepo;
-import kz.ivc.games.repo.GameRepo;
-import kz.ivc.games.repo.GamerRepo;
-import kz.ivc.games.repo.PartnerRepo;
+import kz.ivc.games.entity.*;
+import kz.ivc.games.repo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +32,14 @@ public class GameController {
     private GameRepo gameRepo;
     private PartnerRepo partnerRepo;
     private CompetitationRepo competitationRepo;
+    private DezhurnyRepo dezhurnyRepo;
 
-    public GameController(CompetitationRepo competitationRepo, GameRepo gameRepo, GamerRepo gamerRepo, PartnerRepo partnerRepo) {
+    public GameController(CompetitationRepo competitationRepo, GameRepo gameRepo, GamerRepo gamerRepo, PartnerRepo partnerRepo,DezhurnyRepo dezhurnyRepo) {
         this.gameRepo = gameRepo;
         this.gamerRepo = gamerRepo;
         this.partnerRepo = partnerRepo;
         this.competitationRepo = competitationRepo;
+        this.dezhurnyRepo=dezhurnyRepo;
     }
 
     //***********************************GameCompetition*******************************************************
@@ -203,7 +199,5 @@ public class GameController {
         model.addAttribute("results", resultDTOList);
         return "games";
     }
-
-
 
 }
