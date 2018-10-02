@@ -38,7 +38,7 @@
 
 <div class="container">
   <!--  <h1>${model["resource"].getString("Please, write your gamer name and nick")}</h1>-->
-        <form   name="gamer" action="addGamers" method="POST">
+        <form   name="gamer" action="addGamers" modelAttribute="newGamer" method="POST">
 
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label" for="FIO">${model["resource"].getString("FIO")}:</label>
