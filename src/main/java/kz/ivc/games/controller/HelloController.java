@@ -15,6 +15,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.Id;
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -33,7 +34,7 @@ public class HelloController {
 
     //***********************************Show Competition*******************************************************
 
-    @GetMapping("/main")
+    /*@GetMapping("/main")
     public String hello(@ModelAttribute("model") ModelMap model, @RequestParam(value = "name", required = false, defaultValue = "World") String name) {
         List<Competition> competitionList = this.competitationRepo.findAllByOrderByIdDesc();
         model.addAttribute("competitionList", competitionList);
@@ -43,13 +44,29 @@ public class HelloController {
         return "main";
     }
 
+*/
+
+
+    @GetMapping("/main")
+    public String home(@ModelAttribute("model") ModelMap model,
+                       @RequestParam(value = "name", required = false, defaultValue = "World") String name) {
+        model.addAttribute("resource",resource);
+        return "home";
+    }
+
 
 //***********************************DELETE Competition*******************************************************
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-    public String deleteCompetition(@PathVariable Long id) {
-        Competition competition = this.competitationRepo.getOne(id);
-        this.competitationRepo.delete(competition);
+
+    public String deleteCompetition(@PathVariable Long id,@ModelAttribute("model") ModelMap model) {
+     try {
+         Competition competition = this.competitationRepo.getOne(id);
+         this.competitationRepo.delete(competition);
+     }catch (Exception ex){
+         model.put("mess","Competition did not finish!");
+         return "messages";
+     }
         return "redirect:/main2";
     }
 
@@ -87,6 +104,8 @@ public class HelloController {
     }
 
     //***********************************Add new Competition*******************************************************
+
+
     @GetMapping("/addCompetition")
     public String addCompetitionFormGet(@ModelAttribute("model") ModelMap model) {
         model.addAttribute("resource",resource);
@@ -96,6 +115,7 @@ public class HelloController {
 
     @RequestMapping(value = {"/addCompetition"}, method = RequestMethod.POST)
     public String addCompetition(Model model, Form form) {
+
         Competition competition = new Competition();
         String name = form.getName();
         if (name != null && name.length() > 0) {
@@ -108,6 +128,24 @@ public class HelloController {
 
         }*/
         return "addCompetition";
+    }
+    
+    
+    
+    //*******************************************FromErrorPageToBack******************************
+    @RequestMapping(value = {"/messages"}, method = RequestMethod.POST)
+    public String goBack(Model model, Form form, HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
+        if(referer!=null){
+            return "redirect:" + referer;
+        }else {
+            return "main2";
+        }
+    }
+
+    @GetMapping("/helloJs")
+    public String helloJs() {
+        return "testJS";
     }
 }
 
