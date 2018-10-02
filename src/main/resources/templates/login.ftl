@@ -32,7 +32,7 @@
         </nav>
         <div class="container">
             <h1>${model["resource"].getString("Sign in")}</h1>
-            <form method="POST">
+            <form id="loginform" method="POST">
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label" for="username">${model["resource"].getString("User name")}</label>
                         <div class="col-sm-10">
@@ -47,7 +47,11 @@
                 </div>
                 <button type="submit" class="btn btn-primary btn-lg" >${model["resource"].getString("signin")}</button>
             </form>
-
         </div>
+            <div class="b-popup" id="popup1">
+                <div class="b-popup-content">
+                    Error!
+                </div>
+            </div>
     </body>
 </html>
