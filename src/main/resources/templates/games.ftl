@@ -43,16 +43,20 @@
     </nav>
 
     <div>
+
+
         <table class="table table-bordered">
+                <th>numb</th>
                 <th class="a"> <span class="rotate">${model["resource"].getString("Gamers")}</span></th>
                 <#list model["results"] as result>
-                <th class="a"><span class="rotate">${result.nick}</span> </th>
+                <th class="a"><span class="rotate">${result?counter}</span> </th>
                 </#list>
                 <th class="a"><span class="rotate">${model["resource"].getString("Score")}</span> </th>
                 <th class="a"><span class="rotate">${model["resource"].getString("Deference")}</span></th>
                 <!--table body-->
                 <#list model["results"] as result>
                         <tr>
+                            <th>${result?counter}</th>
                             <th ><span class="rotate">${result.nick}</span></th>
                                 <#list result.gameList as game>
                                     <td>
@@ -71,9 +75,11 @@
                                 </#list>
                             <td> ${result.agrBall}</td>
                             <td> ${result.deference}</td>
-                        </tr>
+
+    </tr>
                 </#list>
         </table>
     </div>
+
 </body>
 </html>

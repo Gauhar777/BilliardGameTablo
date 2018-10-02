@@ -55,11 +55,13 @@
 <input type="hidden" name="id" value="${model.competition.id}">
 
 <table class="table table-striped table-borderless">
+    <th scope="col">№</th>
     <th  scope="col">${model["resource"].getString("FIO")}</th>
     <th  scope="col">${model["resource"].getString("Nick")}</th>
     <th> </th>
     <#list model["answers"] as answer>
     <tr>
+        <th>${answer?counter}</th>
         <td class="gamerI">${answer.FIO} </td>
         <td class="gamerI">${answer.nick} </td>
         <td>
@@ -70,21 +72,7 @@
                     <img src="/images/delete-button.png">
                 </button>
             </a>
-            <#if answer.dezhuril==false>
-            <a href="/${model.competition.id}/${answer.idGamer}/dezhurit">
-                <button type="button" class="btn btn-primary">
-                    <!--${model["resource"].getString("Choose")}-->
-                    <img src="/images/timer.png">
-                </button>
-            </a>
-            <#else>
-            <a href="/${model.competition.id}/${answer.idGamer}/cancellDezhurny">
-                <button type="button" class="btn btn-success">
-                    <!--   ${model["resource"].getString("Exclude")}-->
-                    <img src="/images/done.png">
-                </button>
-            </a>
-        </#if>
+
 
         <#if answer.choosed==false>
             <a href="/${model.competition.id}/${answer.idGamer}/choosePartner">
@@ -101,6 +89,21 @@
                 </button>
             </a>
         </#if>
+        <#if answer.dezhuril==false>
+        <a href="/${model.competition.id}/${answer.idGamer}/dezhurit">
+            <button type="button" class="btn btn-primary">
+                <!--${model["resource"].getString("Choose")}-->
+                <img src="/images/timer.png">
+            </button>
+        </a>
+        <#else>
+        <a href="/${model.competition.id}/${answer.idGamer}/cancellDezhurny">
+            <button type="button" class="btn btn-success">
+                <!--   ${model["resource"].getString("Exclude")}-->
+                <img src="/images/done.png">
+            </button>
+        </a>
+    </#if>
 
         </td>
     </tr>

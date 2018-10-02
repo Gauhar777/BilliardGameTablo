@@ -8,14 +8,16 @@
     <link rel="stylesheet" href="/css/myStyle.css">
     <link rel="stylesheet" href="/css/mediaStyle.css">
     <link rel="stylesheet" href="/css/navBarStyle.css">
-    <!--
-    <link rel="stylesheet" href="/bootstrap-3.3.7-dist/css/myStyle2.css">
-    -->
 </head>
 <body>
     <#assign isAuthenticated = model["isAuthenticated"] />
     <nav class="navbar navbar-dark navbar-expand">
         <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a  class="nav-link" href="/main">
+                    ${model["resource"].getString("mainPage")}
+                </a>
+            </li>
             <li class="nav-item active">
                 <a  class="nav-link" href="#">
                     ${model["resource"].getString("Competition")}
@@ -56,40 +58,29 @@
             <th></th>
         </tr>
         </thead>
-        <tbody>
-            <#list model["competitionList"] as competition>
-                <tr>
-                    <td>
-                        <div > ${competition.name}</div>
-                    </td>
-                    <td>
-                        <a href="/Competition/${competition.id}/showGames">
-                            <button type="button" class="btn btn-primary">
-                                <img src="/images/scoreboard.png">
-                            </button>
-                        </a>
-                        <#if isAuthenticated==true>
-                            <a href="edit/${competition.id}">
+            <tbody>
+                <#list model["competitionList"] as competition>
+                    <tr>
+                        <td>
+                            <div > ${competition.name}</div>
+                        </td>
+                        <td>
+                            <a href="/Competition/${competition.id}/showGames">
                                 <button type="button" class="btn btn-primary">
-                                    <img src="/images/settings.png">
+                                    <img src="/images/scoreboard.png">
                                 </button>
                             </a>
-                        </#if>
-                    </td>
-                </tr>
-            </#list>
-        </tbody>
+                            <#if isAuthenticated==true>
+                                <a href="edit/${competition.id}">
+                                    <button type="button" class="btn btn-primary">
+                                        <img src="/images/settings.png">
+                                    </button>
+                                </a>
+                            </#if>
+                        </td>
+                    </tr>
+                </#list>
+            </tbody>
         </table>
-<!--
-
-
-
-
-    <div class="add">
-        <a href="addCompetition">
-            <button type="button" class="btn btn-info btn-lg">${model["resource"].getString("Add new competition")}</button>
-        </a>
-    </div>
-    -->
 </body>
 </html>
