@@ -42,13 +42,13 @@
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label" for="point1">${model.gamer1.nick}</label>
                 <div class="col-sm-10">
-                    <input class="form-control" name="point1" id="point1"/>
+                    <input type="number" class="form-control" name="point1" id="point1" min="0" max="8" value="${model.point1}"/>
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label"  for="point2">${model.gamer2.nick}</label>
                 <div class="col-sm-10">
-                    <input class="form-control" name="point2" id="point2"/>
+                    <input type="number" class="form-control" name="point2" id="point2" min="0" max="8" value="${model.point2}"/>
                 </div>
             </div>
             <button type="submit" class="btn btn-primary btn-lg">${model["resource"].getString("save")}</button>
