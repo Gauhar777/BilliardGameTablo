@@ -1,11 +1,8 @@
 jQuery(document).ready(function($){
     PopUpHide();
     $( "#loginform" ).submit(function( event ) {
-    if($('#username').val()==="admin"){
-        if($('#password').val()==="admin"){
-            alert('succsess!');
+        if($('#username').val()==="admin" && $('#password').val()==="admin"){
             return;
-        }
     }else{
     PopUpShow();
     event.preventDefault();
