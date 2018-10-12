@@ -120,7 +120,7 @@ public class GamerController {
 
         Partner partner1=this.partnerRepo.findByIdCompetitionAndIdGamer(idC,idGamer);
         this.partnerRepo.delete(partner1);
-
+        System.out.println("Deletes"+partner1);
         return "redirect:/competition/{idC}/addGamers";
     }
 
