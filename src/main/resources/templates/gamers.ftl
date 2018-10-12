@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="/css/myStyle.css">
     <link rel="stylesheet" href="/css/mediaStyle.css">
     <link rel="stylesheet" href="/css/navBarStyle.css">
+    <script src="/javascript/jquery-3.3.1.js"></script>
+    <script src="/javascript/exlude.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-dark navbar-expand">
@@ -72,50 +74,58 @@
                     <img src="/images/delete-button.png">
                 </button>
             </a>
-
-
-        <#if answer.choosed==false>
-            <a href="/${model.competition.id}/${answer.idGamer}/choosePartner">
-                <button type="button" class="btn btn-success">
+        </td>
+        <td>
+            <#if answer.choosed==false>
+                <a href="/${model.competition.id}/${answer.idGamer}/choosePartner">
+                    <button type="button" class="btn btn-success">
+                        <!--${model["resource"].getString("Choose")}-->
+                        <img src="/images/addition.png">
+                    </button>
+                </a>
+            <#else>
+                <a name="exludeHref" href="/${model.competition.id}/${answer.idGamer}/excludePartner">
+                    <button type="button" id="exclude" class="btn btn-danger">
+                        <!--   ${model["resource"].getString("Exclude")}-->
+                        <img src="/images/minus.png">
+                    </button>
+                </a>
+            </#if>
+        </td>
+        <td>
+            <#if answer.dezhuril==false>
+            <a href="/${model.competition.id}/${answer.idGamer}/dezhurit">
+                <button type="button" class="btn btn-primary">
                     <!--${model["resource"].getString("Choose")}-->
-                    <img src="/images/addition.png">
+                    <img src="/images/timer.png">
                 </button>
             </a>
-        <#else>
-            <a href="/${model.competition.id}/${answer.idGamer}/excludePartner">
-                <button type="button" class="btn btn-danger">
+            <#else>
+            <a href="/${model.competition.id}/${answer.idGamer}/cancellDezhurny">
+                <button type="button" class="btn btn-success">
                     <!--   ${model["resource"].getString("Exclude")}-->
-                    <img src="/images/minus.png">
+                    <img src="/images/done.png">
                 </button>
             </a>
-        </#if>
-        <#if answer.dezhuril==false>
-        <a href="/${model.competition.id}/${answer.idGamer}/dezhurit">
-            <button type="button" class="btn btn-primary">
-                <!--${model["resource"].getString("Choose")}-->
-                <img src="/images/timer.png">
-            </button>
-        </a>
-        <#else>
-        <a href="/${model.competition.id}/${answer.idGamer}/cancellDezhurny">
-            <button type="button" class="btn btn-success">
-                <!--   ${model["resource"].getString("Exclude")}-->
-                <img src="/images/done.png">
-            </button>
-        </a>
-    </#if>
-
+            </#if>
         </td>
     </tr>
-</#list>
+    </#list>
 </table>
-<!--<div class="add">
-    <a href="/${model.competition.id}/addGamers"><button type="button" class="btn  btn-primary btn-lg">${model["resource"].getString("Add new gamer")}</button></a>
+
+<div class="dialog" id="diaWind" >
+    <div class="dialog_content">
+        <p>are you sear?</p>
+        <p>
+            <a id="exludeHref">
+                <button id="ok" type="button" class="btn btn-default">ok</button>
+            </a>
+            <a href="javascript:dialogHide()">
+                <button id="cancel" type="button" class="btn btn-default">cancel</button>
+            </a>
+        </p>
+    </div>
 </div>
-<!--  <p>
-    <a href="/main"><button type="button" class="btn btn-info btn-lg">${model["resource"].getString("Back")}</button></a>
-    <a href="/Competition/${model.competition.id}/showGames"><button type="button" class="btn btn-info btn-lg">${model["resource"].getString("Game")}</button></a>
-</p>
--->
+
 </body>
 </html>
