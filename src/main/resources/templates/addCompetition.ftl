@@ -1,46 +1,42 @@
-<#import "/spring.ftl" as spring/>
-<html>
+<!doctype html>
+<html lang="ru">
 <head>
+    <title>Новый турнир</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/myStyle.css">
-    <link rel="stylesheet" href="/css/mediaStyle.css">
-    <link rel="stylesheet" href="/css/navBarStyle.css">
+
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <!-- Twitter Card data -->
+    <meta name="twitter:site" content="">
+    <meta name="twitter:title" content="Вторник клуб">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:image" content="">
+
+    <!-- Open Graph data -->
+    <meta property="og:title" content="Вторник клуб">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <meta property="og:description" content="">
+    <meta property="og:site_name" content="">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="/css/vtornik.css">
 </head>
 <body>
-    <nav class="navbar navbar-dark navbar-expand">
+<div class="wrp">
+    <main class="main" id="main">
+        <form id="new-tournament" class="new-tournament" name="comp"  method="POST">
+            <input id="name" name="name" class="new-tournament__input" type="text" placeholder="Название турнира"/>
+            <button type="submit" class="new-tournament__add" formaction="/addCompetition2">Добавить игроков</button>
+            <input class="new-tournament__btn" type="submit" formaction="/addCompetition" value="Сохранить"/>
+        </form>
+    </main>
+</div>
 
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link"  href="/main2">
-                    ${model["resource"].getString("Competition")}
-                    <span class="sr-only">(current)</span>
-                </a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link"  href="#">
-                    ${model["resource"].getString("Add")}
-                    <span class="sr-only">(current)</span>
-                </a>
-            </li>
-        </ul>
-        <div>
-             <a href="/logout">
-                <button type="button" class="btn btn-primary btn-lg">
-                    <img src="/images/sign-out.png">
-                </button>
-             </a>
-        </div>
-    </nav>
-
-    <div class="container">
-        <!--    <h2>${model["resource"].getString("Please write your competition name")}</h2>-->
-            <form class="form-inline"  name="comp" action="/addCompetition" method="POST">
-                    <label for="name" class="mb-2 mr-sm-2">${model["resource"].getString("Name")}:</label>
-                    <input  class="form-control mb-2 mr-sm-2" id="name" name="name" type="text"/>
-                    <button type="submit" class="btn btn-primary btn-lg"> ${model["resource"].getString("Add new competition")}</button>
-            </form>
-    </div>
+<script src="js/vtornik.js"></script>
 </body>
 </html>

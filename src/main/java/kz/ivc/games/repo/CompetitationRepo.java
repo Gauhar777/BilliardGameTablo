@@ -11,4 +11,5 @@ import java.util.List;
 public interface CompetitationRepo extends JpaRepository<Competition,Long> {
 
     public List<Competition> findAllByOrderByIdDesc();
+    Competition findIdByName(String name);
 }

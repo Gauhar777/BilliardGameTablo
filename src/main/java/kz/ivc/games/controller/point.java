@@ -10,6 +10,7 @@ import kz.ivc.games.repo.GameRepo;
 import kz.ivc.games.repo.GamerRepo;
 import kz.ivc.games.repo.PartnerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -46,6 +47,20 @@ public class point {
         model.put("gamer1",gamer1);
         model.put("gamer2",gamer2);
         model.put("competition",competition);
+        Game game=this.gameRepo.findByIdPartner1AndIdPartner2AndIdCompetition(idG1,idG2,idC);
+        Game gameMirror=this.gameRepo.findByIdPartner1AndIdPartner2AndIdCompetition(idG2,idG1,idC);
+        if (game==null && gameMirror==null) {
+            int myPoint=0;
+            model.addAttribute("point2",myPoint);
+            model.addAttribute("point1",myPoint);
+        }else if(game==null ){
+            model.addAttribute("point1",gameMirror.getPoint2());
+            model.addAttribute("point2",gameMirror.getPoint1());
+        }else{
+            model.put("point1",game.getPoint1());
+            model.put("point2",game.getPoint2());
+        }
+
         model.addAttribute("resource", resource);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -53,30 +68,7 @@ public class point {
 
         model.put("isAuthenticated",!userName.equals("anonymousUser"));
 
-
-/*
-        Partner partner1=this.partnerRepo.findByIdCompetitionAndIdGamer(idC,idG1);
-        Partner partner2=this.partnerRepo.findByIdCompetitionAndIdGamer(idC,idG2);
-        Long idPartner1=partner1.getId();
-        Long idPartner2=partner2.getId();
-
-        Game game=this.gameRepo.findByIdPartner1AndIdPartner2AndIdCompetition(idPartner1,idPartner2,idC);
-        Game gameMirror=this.gameRepo.findByIdPartner1AndIdPartner2AndIdCompetition(idPartner2,idPartner1,idC);
-
-       /* if (game==null && gameMirror==null){
-            Game newGame=new Game();
-            newGame.setIdPartner1(idPartner1);
-            newGame.setIdPartner2(idPartner2);
-            newGame.setIdCompetition(Long.parseLong(String.valueOf(idC)));
-            this.gameRepo.save(newGame);
-            model.put("game",newGame);
-        }else if (game==null){
-            model.put("game",gameMirror);
-        }else {
-            model.put("game",game);
-        }
-*/
-    return"postPoint";
+        return"postPoint";
     }
 
     @RequestMapping(value = "{idC}/{idG1}/{idG2}/point",method = RequestMethod.POST)
@@ -93,50 +85,30 @@ public class point {
 
         Game game=this.gameRepo.findByIdPartner1AndIdPartner2AndIdCompetition(idPartner1,idPartner2,idC);
         Game gameMirror=this.gameRepo.findByIdPartner1AndIdPartner2AndIdCompetition(idPartner2,idPartner1,idC);
-        if (game==null && gameMirror==null) {
-            Game newGame = new Game();
-            newGame.setIdPartner1(idPartner1);
-            newGame.setIdPartner2(idPartner2);
-            newGame.setIdCompetition(Long.parseLong(String.valueOf(idC)));
-            newGame.setPoint1(Long.parseLong(gameForm.getPoint1()));
-            newGame.setPoint2(Long.parseLong(gameForm.getPoint2()));
-            this.gameRepo.save(newGame);
-        }else if (game!=null) {
-            game.setPoint1(Long.parseLong(gameForm.getPoint1()));
-            game.setPoint2(Long.parseLong(gameForm.getPoint2()));
-            this.gameRepo.save(game);
+        try {
+                if (game == null && gameMirror == null) {
+                    Game newGame = new Game();
+                    newGame.setIdPartner1(idPartner1);
+                    newGame.setIdPartner2(idPartner2);
+                    newGame.setIdCompetition(Long.parseLong(String.valueOf(idC)));
+                    newGame.setPoint1(Long.parseLong(gameForm.getPoint1()));
+                    newGame.setPoint2(Long.parseLong(gameForm.getPoint2()));
+                    this.gameRepo.save(newGame);
+                } else if (game != null) {
+                    game.setPoint1(Long.parseLong(gameForm.getPoint1()));
+                    game.setPoint2(Long.parseLong(gameForm.getPoint2()));
+                    this.gameRepo.save(game);
 
-        }else {
-            gameMirror.setPoint1(Long.parseLong(gameForm.getPoint1()));
-            gameMirror.setPoint2(Long.parseLong(gameForm.getPoint2()));
-            this.gameRepo.save(gameMirror);
+                } else {
+                    gameMirror.setPoint1(Long.parseLong(gameForm.getPoint1()));
+                    gameMirror.setPoint2(Long.parseLong(gameForm.getPoint2()));
+                    this.gameRepo.save(gameMirror);
+                }
+        }catch (Exception exx){
+            String mess="Put points,please!";
+            model.put("mess",mess);
+            return "messages";
         }
-
-        return "redirect:/Competition/{idC}/showGames";
-    }
-
-
-
-
-
-/*    @RequestMapping(value = "{idC}/{idG1}/{idG2}/point",method = RequestMethod.POST)
-    public String setPointPage (@ModelAttribute("model") ModelMap model, @PathVariable Long idC,GameForm gameForm){
-        Long idGame=Long.parseLong(gameForm.getId());
-          Game game = this.gameRepo.getOne(idGame);
-
-        System.out.println("/////////////"+game);
-        String point1 = gameForm.getPoint1();
-        String point2 =gameForm.getPoint2();
-        System.out.println("/////////////"+point1);
-        System.out.println("///////\\\\\\\\"+point2);
-        if ((point1 == null && point2 == null) && (point1.length() > 0 && point2.length() > 0)) {
-            return"postPoint";
-        }else{
-            game.setPoint1(Long.parseLong(point1));
-            game.setPoint2(Long.parseLong(point2));
-            this.gameRepo.save(game);
-            return "redirect:/Competition/{idC}/showGames";
-        }
-
-    }*/
+    return "redirect:/Competition/{idC}/showGames";
+}
 }

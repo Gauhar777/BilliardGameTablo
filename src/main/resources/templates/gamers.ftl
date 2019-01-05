@@ -1,131 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="ru">
 <head>
+    <title>Главная</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/myStyle.css">
-    <link rel="stylesheet" href="/css/mediaStyle.css">
-    <link rel="stylesheet" href="/css/navBarStyle.css">
-    <script src="/javascript/jquery-3.3.1.js"></script>
-    <script src="/javascript/exlude.js"></script>
+
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <!-- Twitter Card data -->
+    <meta name="twitter:site" content="">
+    <meta name="twitter:title" content="Вторник клуб">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:image" content="">
+
+    <!-- Open Graph data -->
+    <meta property="og:title" content="Вторник клуб">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <meta property="og:description" content="">
+    <meta property="og:site_name" content="">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="/css/vtornik.css">
 </head>
 <body>
-<nav class="navbar navbar-dark navbar-expand">
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-            <a class="nav-link" href="/main2">
-                ${model["resource"].getString("Competition")}
-                <span class="sr-only">(current)</span>
-            </a>
-        </li>
-
-        <li class="nav-item active">
-            <a class="nav-link" href="#">
-                ${model["resource"].getString("Gamers")}
-                <span class="sr-only">(current)</span>
-            </a>
-        </li>
-    </ul>
-    <div>
-        <a href="/${model.competition.id}/addGamers">
-            <button type="button" class="btn  btn-primary btn-lg">
-                <!--${model["resource"].getString("Add new gamer")}-->
-                <img src="/images/add.png">
-            </button>
-        </a>
-
-        <a href="/Competition/${model.competition.id}/showGames">
-            <button type="button" class="btn btn-primary btn-lg">
-                <!--${model["resource"].getString("Game")}-->
-                <img src="/images/scoreboard.png">
-            </button>
-        </a>
-            <a href="/logout">
-                <button type="button" class="btn btn-primary btn-lg">
-                    <img src="/images/sign-out.png">
-                </button>
-            </a>
+<div class="wrp">
+    <main class="main">
+        <div class="main__header">
+            <a href="/Competition/${model.competition.id}/showGames" class="arrow">Таблица со счетом</a>
         </div>
-</nav>
-<!--
-     <h1 class="text-info">${model["resource"].getString("Choose gamers for competition")} : <b class="text-info">${model.competition.name}</b></h1>
- -->
-<input type="hidden" name="id" value="${model.competition.id}">
+        <h1 class="main__title">Общий список игроков</h1>
+        <div class="tournament">
 
-<table class="table table-striped table-borderless">
-    <th scope="col">№</th>
-    <th  scope="col">${model["resource"].getString("FIO")}</th>
-    <th  scope="col">${model["resource"].getString("Nick")}</th>
-    <th> </th>
-    <#list model["answers"] as answer>
-    <tr>
-        <th>${answer?counter}</th>
-        <td class="gamerI">${answer.FIO} </td>
-        <td class="gamerI">${answer.nick} </td>
-        <td>
+            <a href="#" class="tournament__btn" data-toggle="modal" data-target="#myModal">Добавить нового игрока</a>
+        <#list model["answers"] as answer>
+            <ul class="tournament__list">
+                <#if answer.choosed==false>
+                    <li><a href="/${model.competition.id}/${answer.idGamer}/choosePartner" class="js-tournament">${answer.nick}</a></li>
+                <#else>
+                    <li><a href="/${model.competition.id}/${answer.idGamer}/excludePartner" class="js-tournament ok">${answer.nick}</a></li>
+                </#if>
+            </ul>
+        </#list>
+            <a href="#" class="tournament__btn ok">ОК</a>
 
-            <a href="/${model.competition.id}/deleteGamer/${answer.idGamer}">
-                <button type="button" class="btn btn-danger">
-                <!--   ${model["resource"].getString("Exclude")}-->
-                    <img src="/images/delete-button.png">
-                </button>
-            </a>
-        </td>
-        <td>
-            <#if answer.choosed==false>
-                <a href="/${model.competition.id}/${answer.idGamer}/choosePartner">
-                    <button type="button" class="btn btn-success">
-                        <!--${model["resource"].getString("Choose")}-->
-                        <img src="/images/addition.png">
-                    </button>
-                </a>
-            <#else>
-                <a name="exludeHref" href="/${model.competition.id}/${answer.idGamer}/excludePartner">
-                    <button type="button" id="exclude" class="btn btn-danger">
-                        <!--   ${model["resource"].getString("Exclude")}-->
-                        <img src="/images/minus.png">
-                    </button>
-                </a>
-            </#if>
-        </td>
-        <td>
-            <#if answer.dezhuril==false>
-            <a href="/${model.competition.id}/${answer.idGamer}/dezhurit">
-                <button type="button" class="btn btn-primary">
-                    <!--${model["resource"].getString("Choose")}-->
-                    <img src="/images/timer.png">
-                </button>
-            </a>
-            <#else>
-            <a href="/${model.competition.id}/${answer.idGamer}/cancellDezhurny">
-                <button type="button" class="btn btn-success">
-                    <!--   ${model["resource"].getString("Exclude")}-->
-                    <img src="/images/done.png">
-                </button>
-            </a>
-            </#if>
-        </td>
-    </tr>
-    </#list>
-</table>
-
-<div class="dialog" id="diaWind" >
-    <div class="dialog_content">
-        <p>are you sear?</p>
-        <p>
-            <a id="exludeHref">
-                <button id="ok" type="button" class="btn btn-default">ok</button>
-            </a>
-            <a href="javascript:dialogHide()">
-                <button id="cancel" type="button" class="btn btn-default">cancel</button>
-            </a>
-        </p>
-    </div>
+            <!-- Добавить нового игрока -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                            <h4 class="modal-title" id="myModalLabel">Введите имя игрока</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form class="tournament__form" action="/addGamers" method="POST">
+                                <input class="tournament__input" name="nick" type="text"/>
+                                <input class="tournament__submit"  type="submit" value="Ok"/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 </div>
 
+<script src="/js/vtornik.js"></script>
 </body>
 </html>

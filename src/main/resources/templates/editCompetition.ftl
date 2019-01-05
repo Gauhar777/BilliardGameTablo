@@ -1,52 +1,42 @@
-<#import "/spring.ftl" as spring/>
-<html>
+<!doctype html>
+<html lang="ru">
 <head>
+    <title>Новый турнир</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/navBarStyle.css">
-    <link rel="stylesheet" href="/css/myStyle.css">
-    <link rel="stylesheet" href="/css/mediaStyle.css">
+
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <!-- Twitter Card data -->
+    <meta name="twitter:site" content="">
+    <meta name="twitter:title" content="Вторник клуб">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:image" content="">
+
+    <!-- Open Graph data -->
+    <meta property="og:title" content="Вторник клуб">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <meta property="og:description" content="">
+    <meta property="og:site_name" content="">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="/css/vtornik.css">
 </head>
 <body>
-    <nav class="navbar navbar-dark navbar-expand">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a  class="nav-link" href="/main2">
-                    ${model["resource"].getString("Competition")}
-                    <span class="sr-only">(current)</span>
-                </a>
-            </li>
-            <li class="nav-item active">
-                <a  class="nav-link" href="#">
-                    ${model["resource"].getString("Edit")}
-                    <span class="sr-only">(current)</span>
-                </a>
-            </li>
-        </ul>
-
-        <div>
-            <a href="/delete/${model.competition.id}">
-                <button style="font-size:1.5em;" type="button" class="btn btn-danger btn-lg">
-                    <img src="/images/delete-button.png">
-                </button>
-            </a>
-                <a href="/logout">
-                    <button type="button" class="btn btn-primary btn-lg">
-                        <img src="/images/sign-out.png">
-                    </button>
-                </a>
-            </div>
-    </nav>
-
-    <div class="container">
-     <!--   <h1 class="text-info">${model["resource"].getString("Please,write your competition new name")} </h1>-->
-        <form class="form-inline"   name="editForm" action="/editCompetitionSave"  method="post">
-                <input name="id"  type="hidden" value="${model.competition.id}" />
-                <label class="mb-2 mr-sm-2" for="name">${model["resource"].getString("Name")}:</label>
-                <input name="name" class="form-control mb-2 mr-sm-2" id="name" type="text" value="${model.competition.name}"/>
-                <button type="submit" class="btn btn-primary btn-lg" >${model["resource"].getString("Edit")}</button>
+<div class="wrp">
+    <main class="main" id="main">
+        <form id="new-tournament" class="new-tournament" name="editForm"  method="POST">
+            <input name="id"  type="hidden" value="${model.competition.id}" />
+            <input id="name" name="name" class="new-tournament__input" type="text" placeholder="${model.competition.name}"/>
+            <button type="submit" class="new-tournament__add" formaction="/ediCompetition2">Добавить игроков</button>
+            <input class="new-tournament__btn" type="submit" formaction="/editCompetitionSave" value="Изменить"/>
         </form>
-    </div>
+</div>
+    <img src="${photoPath}" height="100" width="100">
+<script src="/js/vtornik.js"></script>
 </body>
 </html>

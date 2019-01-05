@@ -24,29 +24,36 @@
     <meta property="og:site_name" content="">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <link rel="stylesheet" href="css/vtornik.css">
+    <link rel="stylesheet" href="/css/vtornik.css">
 </head>
 <body>
-<#assign isAuthenticated = model["isAuthenticated"] />
 <div class="wrp">
-    <div class="logo">
-        <img src="img/logo-vtornik.png" alt="">
-    </div>
     <main class="main">
-        <h1 class="main__title">Турниры</h1>
-        <div class="create-tournament">
-        <#if isAuthenticated==true>
-            <a href="/addCompetition" class="create-tournament__btn">Создать турнир</a>
-        </#if>
-            <ul class="create-tournament__list">
-            <#list model["competitionList"] as competition>
-                <li><a href="/Competition/${competition.id}/showGames">${competition.name}</a></li>
-            </#list>
-            </ul>
+        <div class="photo">
+            <div class="photo__header">
+
+                <a href="#" class="photo__icon"><img src="/img/photo.png" alt=""></a>
+
+
+                <h1>Сентябрь 2018</h1>
+
+                <div class="photo__control">
+                    <a href="#"><img src="/img/edit.png" alt=""></a>
+                    <a href="#"><img src="/img/close.png" alt=""></a>
+                </div>
+
+            </div>
+            <div class="photo__main">
+                <img src="/uploads/${model.photo.name}" alt="">
+            </div>
+            <div class="photo__footer">
+                <a href="#" class="photo__btn ok">ОК</a>
+                <a href="#" class="photo__btn">Другое фото</a>
+            </div>
         </div>
     </main>
 </div>
 
-<script src="js/vtornik.js"></script>
+<script src="/js/vtornik.js"></script>
 </body>
 </html>

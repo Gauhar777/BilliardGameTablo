@@ -52,7 +52,9 @@ public class GamerController {
     @RequestMapping(value = "/competition/{idCompetition}/addGamers", method = RequestMethod.GET)
     public String signInCompetitionFormGet(@ModelAttribute("model") ModelMap model,
                                            GamerForm gamerForm,@PathVariable Long idCompetition) {
+
         Competition competition = this.competitationRepo.getOne(idCompetition);
+
         model.put("competition", competition);
 
         model.addAttribute("resource",resource);
@@ -62,7 +64,7 @@ public class GamerController {
         List<Gamer> gamerList = this.gamerRepo.findAll();
         for (Gamer gamer : gamerList) {
             GamerOfCompetition gamerOfCompetition = new GamerOfCompetition();
-            gamerOfCompetition.setFIO(gamer.getFIO());
+
             gamerOfCompetition.setNick(gamer.getNick());
             gamerOfCompetition.setIdGamer(gamer.getId());
             Partner partner=this.partnerRepo.findByIdCompetitionAndIdGamer(idCompetition,gamer.getId());
@@ -125,7 +127,7 @@ public class GamerController {
     }
 
     //*********************************************************NewGamer*******************************************
-    @GetMapping("{idC}/addGamers")
+    /*@GetMapping("{idC}/addGamers")
     public String formGet(@ModelAttribute("model") ModelMap model,@PathVariable Long idC) {
         Competition competition = this.competitationRepo.getOne(idC);
         model.put("competition", competition);
@@ -135,16 +137,19 @@ public class GamerController {
         model.addAttribute("resource",resource);
 
         return "addGamers";
-    }
+    }*/
 
 
 
-    @RequestMapping(value = {"{idC}/addGamers"}, method = RequestMethod.POST)
-    public String gamersSave( @ModelAttribute("newGamer") Gamer newGamer,@PathVariable Long idC, GamerForm gamersForm,ModelMap model) {
-        model.addAttribute("name", newGamer.getFIO());
-        model.addAttribute("id", newGamer.getNick());
-        this.gamerRepo.save(newGamer);
-        return "redirect:/competition/{idC}/addGamers";
+    @RequestMapping(value = {"/addGamers"}, method = RequestMethod.POST)
+    public String gamersSave( GamerForm gamersForm,ModelMap model) {
+        String nick=gamersForm.getNick();
+        Gamer newGamer =new Gamer();
+        if (nick != null && nick.length() > 0) {
+            newGamer.setNick(nick);
+            this.gamerRepo.save(newGamer);
+        }
+        return "gamers";
     }
 
 
@@ -204,7 +209,7 @@ public class GamerController {
 
             bestGamer.setId(gamer.getId());
             bestGamer.setNick(gamer.getNick());
-            bestGamer.setFIO(gamer.getFIO());
+
 
             List<Partner> partnerList=this.partnerRepo.findByIdGamer(gamer.getId());
             for(Partner partner1:partnerList) {

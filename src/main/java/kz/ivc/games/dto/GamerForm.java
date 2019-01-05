@@ -6,7 +6,7 @@ package kz.ivc.games.dto;
 public class GamerForm {
 
     private String Id;
-    private String FIO;
+
     private String nick;
 
 
@@ -18,13 +18,6 @@ public class GamerForm {
         Id = id;
     }
 
-    public String getFIO() {
-        return FIO;
-    }
-
-    public void setFIO(String FIO) {
-        this.FIO = FIO;
-    }
 
     public String getNick() {
         return nick;
