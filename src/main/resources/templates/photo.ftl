@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="ru">
 <head>
@@ -31,11 +32,9 @@
     <main class="main">
         <div class="photo">
             <div class="photo__header">
+                <a href="#" class="photo__icon"><img src="/img/camera.png" alt=""></a>
 
-                <a href="#" class="photo__icon"><img src="/img/photo.png" alt=""></a>
-
-
-                <h1>Сентябрь 2018</h1>
+                <h1>${model.competition.name}</h1>
 
                 <div class="photo__control">
                     <a href="#"><img src="/img/edit.png" alt=""></a>
@@ -44,15 +43,44 @@
 
             </div>
             <div class="photo__main">
-                <img src="/uploads/${model.photo.name}" alt="">
+
+                <img src="/up/${model.photo.name}" alt="">
+
             </div>
             <div class="photo__footer">
-                <a href="#" class="photo__btn ok">ОК</a>
-                <a href="#" class="photo__btn">Другое фото</a>
+                <a href="/Competition/${model.competition.id}/showGames" class="photo__btn ok">ОК</a>
+                <a href="#" class="photo__btn" data-toggle="modal" data-target="#photo">Другое фото</a>
             </div>
         </div>
     </main>
 </div>
+
+
+
+<!-- Добавить фото -->
+<div class="modal photo fade" id="photo" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form class="rating-all__form" method="post" enctype="multipart/form-data" action="/${model.competition.id}/uploading">
+                    <div class="rating-all__button" name="file">
+                        <label for="file"  name="file" class="img">
+                            <img src="/img/gallery.png" alt="">
+                        </label>
+                        <label for="file" name="file">Загрузить из галереи</label>
+
+                        <input type="file" name="file" onchange="this.form.submit()" id="file" style="display:none;"/>
+                    </div>
+                    <button type="button" class="rating-all__button">
+                        <div class="img"><img src="/img/photo-black.png" alt=""></div>
+                        Сделать фото
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script src="/js/vtornik.js"></script>
 </body>

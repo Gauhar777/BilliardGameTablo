@@ -33,19 +33,28 @@ public class GameController {
     private PartnerRepo partnerRepo;
     private CompetitationRepo competitationRepo;
     private DezhurnyRepo dezhurnyRepo;
+    private PhotoRepo photoRepo;
 
-    public GameController(CompetitationRepo competitationRepo, GameRepo gameRepo, GamerRepo gamerRepo, PartnerRepo partnerRepo,DezhurnyRepo dezhurnyRepo) {
+    public GameController(CompetitationRepo competitationRepo, GameRepo gameRepo, GamerRepo gamerRepo, PartnerRepo partnerRepo,DezhurnyRepo dezhurnyRepo,PhotoRepo photoRepo) {
         this.gameRepo = gameRepo;
         this.gamerRepo = gamerRepo;
         this.partnerRepo = partnerRepo;
         this.competitationRepo = competitationRepo;
         this.dezhurnyRepo=dezhurnyRepo;
+        this.photoRepo= photoRepo;
     }
 
     //***********************************GameCompetition*******************************************************
 
     @RequestMapping(value = "/Competition/{idCompetition}/showGames", method = RequestMethod.GET)
     public String showGame(@ModelAttribute("model") ModelMap model, @PathVariable Long idCompetition,final HttpServletRequest request) {
+        Photo photo=this.photoRepo.findByIdCompetition(idCompetition);
+        String container="ContainerIsEmpty";
+        if (photo==null){
+            model.put("container",container);
+        }
+        model.put("photo",photo);
+
         model.addAttribute("resource",resource);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

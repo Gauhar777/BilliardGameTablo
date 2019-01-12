@@ -40,4 +40,44 @@ public class Game {
     public void setIdPartner2(Long idPartner2) {
         this.idPartner2 = idPartner2;
     }
+
+    public Long getPoint1() {
+        return point1;
+    }
+
+    public Long getPoint2() {
+        return point2;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getIdPartner1() {
+        return idPartner1;
+    }
+
+    public void setIdPartner1(Long idPartner1) {
+        this.idPartner1 = idPartner1;
+    }
+
+    public Long getIdCompetition() {
+        return idCompetition;
+    }
+
+    public void setIdCompetition(Long idCompetition) {
+        this.idCompetition = idCompetition;
+    }
+
+    public void setPoint1(Long point1) {
+        this.point1 = point1;
+    }
+
+    public void setPoint2(Long point2) {
+        this.point2 = point2;
+    }
 }

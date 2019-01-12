@@ -36,7 +36,6 @@
             <input class="new-tournament__btn" type="submit" formaction="/editCompetitionSave" value="Изменить"/>
         </form>
 </div>
-    <img src="${photoPath}" height="100" width="100">
 <script src="/js/vtornik.js"></script>
 </body>
 </html>

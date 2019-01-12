@@ -31,4 +31,8 @@ public class Gamer implements Serializable{
     public void setNick(String nick) {
         this.nick = nick;
     }
+
+    public Long getId() {
+        return id;
+    }
 }

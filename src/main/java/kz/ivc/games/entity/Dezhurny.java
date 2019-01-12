@@ -22,6 +22,38 @@ public class Dezhurny implements Serializable {
 
     @Column(name="id_competition")
     private Long idCompetition;
+
+    public void setIdCompetition(Long idCompetition) {
+        this.idCompetition = idCompetition;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getIdGamer() {
+        return idGamer;
+    }
+
+    public void setIdGamer(Long idGamer) {
+        this.idGamer = idGamer;
+    }
+
+    public Long getTime() {
+        return time;
+    }
+
+    public void setTime(Long time) {
+        this.time = time;
+    }
+
+    public Long getIdCompetition() {
+        return idCompetition;
+    }
 }
 
 

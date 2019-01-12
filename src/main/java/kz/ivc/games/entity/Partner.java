@@ -21,4 +21,27 @@ public class Partner implements Serializable {
     @Column(name="id_competition")
     private Long idCompetition;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getIdGamer() {
+        return idGamer;
+    }
+
+    public void setIdGamer(Long idGamer) {
+        this.idGamer = idGamer;
+    }
+
+    public Long getIdCompetition() {
+        return idCompetition;
+    }
+
+    public void setIdCompetition(Long idCompetition) {
+        this.idCompetition = idCompetition;
+    }
 }

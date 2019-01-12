@@ -20,12 +20,6 @@ public class Photo implements Serializable{
     private String name;
 
     @Column
-    private String path;
-
-    @Column
-    private String extension;
-
-    @Column
     private Long idCompetition;
     public Long getId() {
         return id;
@@ -41,22 +35,6 @@ public class Photo implements Serializable{
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public String getExtension() {
-        return extension;
-    }
-
-    public void setExtension(String extension) {
-        this.extension = extension;
     }
 
     public Long getIdCompetition() {
