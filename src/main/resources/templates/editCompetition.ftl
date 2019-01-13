@@ -31,7 +31,7 @@
     <main class="main" id="main">
         <form id="new-tournament" class="new-tournament" name="editForm"  method="POST">
             <input name="id"  type="hidden" value="${model.competition.id}" />
-            <input id="name" name="name" class="new-tournament__input" type="text" placeholder="${model.competition.name}"/>
+            <input id="name" name="name" class="new-tournament__input" type="text" value="${model.competition.name}"/>
             <button type="submit" class="new-tournament__add" formaction="/ediCompetition2">Добавить игроков</button>
             <input class="new-tournament__btn" type="submit" formaction="/editCompetitionSave" value="Изменить"/>
         </form>

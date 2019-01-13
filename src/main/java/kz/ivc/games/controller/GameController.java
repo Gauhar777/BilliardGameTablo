@@ -1,6 +1,7 @@
 package kz.ivc.games.controller;
 
 import kz.ivc.games.dto.GameForm;
+import kz.ivc.games.dto.GamerOfCompetition;
 import kz.ivc.games.dto.ResultDTO;
 import kz.ivc.games.dto.ResultGameDTO;
 import kz.ivc.games.entity.*;
@@ -57,6 +58,7 @@ public class GameController {
 
         model.addAttribute("resource",resource);
 
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         LOG.info("userName="+userName+" "+authentication.isAuthenticated());
@@ -75,9 +77,12 @@ public class GameController {
         long agrPoint2;  // jibergen sharlar sany
 
         for (Partner partner1 : partnerList) {
+
+
             agrBall = 0;
             agrPoint1 = 0;  // salgan sharlar sany
             agrPoint2 = 0;  // jibergen sharlar sany
+            boolean dezh=false;
 
             //*********По партнерам найтти имена играков1
             ResultDTO resultDTO = new ResultDTO();
@@ -104,6 +109,10 @@ public class GameController {
                         resultGameDTO.setId(game.getId());
 
                         Gamer gamer2 = this.gamerRepo.getOne(partner2.getIdGamer());
+                        Dezhurny dezhurny=this.dezhurnyRepo.findByIdCompetitionAndIdGamer(idCompetition,3L);
+                        if(dezhurny!=null){
+                            dezh=true;
+                        }
                         resultGameDTO.setNick(gamer2.getNick());
                         resultGameDTO.setId(game.getId());
                         resultGameDTO.setIdGamer(gamer2.getId());
@@ -151,7 +160,7 @@ public class GameController {
 
                 resultGameDTOS.add(resultGameDTO);
             }
-
+            resultDTO.setDezhuril(dezh);
             resultDTO.setAgrPoint1(agrPoint1);
             resultDTO.setAgrPoint2(agrPoint2);
 
@@ -204,6 +213,10 @@ public class GameController {
                 LOG.info(dto.getNick()+" "+dto.getId()+" "+dto.getIdGamer());
             }
         }
+
+
+
+
 
         model.addAttribute("results", resultDTOList);
         return "games";

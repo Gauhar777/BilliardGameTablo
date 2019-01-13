@@ -11,7 +11,7 @@ public class ResultDTO implements Serializable {
     private long id;
     private String nick;
     private List<ResultGameDTO> gameList;
-
+    private  boolean dezhuril;
     private int agrBall;
     private long agrPoint1;
     private long agrPoint2;
@@ -71,5 +71,13 @@ public class ResultDTO implements Serializable {
 
     public void setDeference(long deference) {
         this.deference = deference;
+    }
+
+    public boolean isDezhuril() {
+        return dezhuril;
+    }
+
+    public void setDezhuril(boolean dezhuril) {
+        this.dezhuril = dezhuril;
     }
 }

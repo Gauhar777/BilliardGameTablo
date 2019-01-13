@@ -70,20 +70,39 @@
                             <div class="table__name">
                             ${game?counter}. ${game.idGamer}
                                     <div class="table__control">
-                                    <div class="table__ok"></div>
-                                    <div class="table__close" data-toggle="modal" data-target="#deletePlay-1"></div>
-
-
-                                        <!-- Удалить игрока -->
+                                        <#if result.dezhuril==false>
+                                            <div class="table__ok" data-toggle="modal" data-target="#dezhuril"></div>
+                                        <#else>
+                                            <div class="table__ok active" ></div>
+                                        </#if>
+                                        <div class="table__close" data-toggle="modal" data-target="#deletePlay-1"></div>
+            <!-- *************************************************************************************Удалить игрока********************************************************** -->
                                         <div class="modal fade" id="deletePlay-1" tabindex="-1" role="dialog" aria-labelledby="deletePlayLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h4 class="modal-title" id="deletePlayLabel">Вы уверены,<br> что хотите удалить игрока?</h4>
+                                                        <h4 class="modal-title" style="color: black;" id="deletePlayLabel">Вы уверены,<br> что хотите удалить игрока?</h4>
                                                     </div>
                                                     <div class="modal-body">
                                                         <form class="rating-all__form" action="">
                                                             <button type="submit" class="rating-all__button" formaction="/${model.competition.id}/${game.idGamer}/excludePartner">Да</button>
+                                                            <button type="button" class="rating-all__button" data-dismiss="modal" aria-label="Close">Нет</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+            <!--****************************************************************************************** Дежурный *******************************************************************-->
+                                        <div class="modal fade" id="dezhuril" tabindex="-1" role="dialog" aria-labelledby="deletePlayLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" style="color: black;"  id="deleteTournamentLabel">Вы уверены,<br> что хотите отметить дежурным игрока?</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form class="rating-all__form" action="">
+                                                            <button type="submit" class="rating-all__button" formaction="/${model.competition.id}/${game.idGamer}/dezhurit">Да</button>
                                                             <button type="button" class="rating-all__button" data-dismiss="modal" aria-label="Close">Нет</button>
                                                         </form>
                                                     </div>
@@ -138,7 +157,7 @@
                         </div>
                         <div class="modal-body">
                             <form class="rating-all__form" action="">
-                                <button type="submit" class="rating-all__button">Да</button>
+                                <button type="submit" class="rating-all__button" formaction="/delete/${model.competition.id}">Да</button>
                                 <button type="button" class="rating-all__button" data-dismiss="modal" aria-label="Close">Нет</button>
                             </form>
                         </div>

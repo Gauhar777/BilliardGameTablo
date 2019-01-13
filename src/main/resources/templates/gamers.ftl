@@ -38,10 +38,14 @@
             <a href="#" class="tournament__btn" data-toggle="modal" data-target="#myModal">Добавить нового игрока</a>
         <#list model["answers"] as answer>
             <ul class="tournament__list">
-                    <li><a href="/${model.competition.id}/${answer.idGamer}/choosePartner" class="js-tournament">${answer.nick}</a></li>
+            <#if answer.choosed==false>
+                <li><a href="/${model.competition.id}/${answer.idGamer}/choosePartner" class="js-tournament">${answer.nick}</a></li>
+            <#else>
+                <li><a href="/${model.competition.id}/${answer.idGamer}/excludePartner" class="ok js-tournament">${answer.nick}</a></li>
+            </#if>
             </ul>
         </#list>
-            <a href="#" class="tournament__btn ok">ОК</a>
+            <a href="/Competition/${model.competition.id}/showGames" class="tournament__btn ok">ОК</a>
 
             <!-- Добавить нового игрока -->
             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
