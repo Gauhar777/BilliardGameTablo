@@ -65,7 +65,7 @@
             <#--/*****************************игроки номер 1*************************************/-->
                 <div class="tab">
                     <#list result.gameList as game>
-                            <div class="table__item">
+                       <div class="table__item">
 
                             <div class="table__name">
                             ${game?counter}. ${game.idGamer}
@@ -113,10 +113,13 @@
                                     </div>
 
                             </div>
-                                    <input class="table__input" type="text" value="<#if result.id==game.idGamer> - <#else>${game.point1}</#if>">
-                                <div class="table__row">${result.agrBall}</div>
-                                <div class="table__row">${result.deference}</div>
-                            </div>
+                            <form name="myPoint" action="/${model.competition.id}/${game.idPartner2}/1/point" method="POST" modelAttribute="employee">
+                                <input class="table__input" type="text" name="point1" id="point1"  min="0" max="8"  onchange="this.form.submit()" value="<#if result.id==game.idGamer> - <#else>${game.point1}</#if>">
+                            </form>
+                            <div class="table__row">${result.agrBall}</div>
+                            <div class="table__row">${result.deference}</div>
+
+                       </div>
                     </#list>
                 </div>
             </#list>
