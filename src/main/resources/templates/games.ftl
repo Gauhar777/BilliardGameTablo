@@ -1,33 +1,13 @@
 <!doctype html>
-<html lang="ru">
+<html lang="en">
 <head>
-    <title>Рейтинг игроков</title>
     <meta charset="UTF-8">
-
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta name="description" content="">
-    <meta name="keywords" content="">
-    <!-- Twitter Card data -->
-    <meta name="twitter:site" content="">
-    <meta name="twitter:title" content="Вторник клуб">
-    <meta name="twitter:description" content="">
-    <meta name="twitter:image" content="">
-
-    <!-- Open Graph data -->
-    <meta property="og:title" content="Вторник клуб">
-    <meta property="og:type" content="article">
-    <meta property="og:url" content="">
-    <meta property="og:image" content="">
-    <meta property="og:description" content="">
-    <meta property="og:site_name" content="">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/css/vtornik.css">
+    <link rel="stylesheet" href="/css/stl.css">
+    <link rel="stylesheet" href="/css/vtornikMedia.css">
 </head>
 <body>
-<#assign isAuthenticated = model["isAuthenticated"] />
 <div class="wrp">
     <main class="main">
         <div class="main__header">
@@ -35,6 +15,7 @@
         </div>
         <div class="rating-all">
             <div class="rating-all__header">
+
                 <#if model.container?exists>
                     <a href="#" class="rating-all__icon" data-toggle="modal" data-target="#photo"><img src="/img/camera.png" alt=""></a>
                 <#else>
@@ -49,132 +30,108 @@
                 </div>
 
             </div>
-            <div class="table tabs">
-                <div class="table__header">
-                    <div>Игроки</div>
-                    <ul class="table__list">
+            <div class="box">
+                <div class="whiteLine"></div>
+                <table>
+                    <thead>
+                    <td class="gamer"><span class="word">Игроки</span> <img class="icon" src="/img/user.png" alt=""> </td>
+                    <td></td>
                     <#list model["results"] as result>
-                        <li class="table__tab">${result?counter}</li>
+                        <td><span class="rotate">${result.nick}</span></td>
                     </#list>
-                    </ul>
-                    <div>Балл</div>
-                    <div>Разница</div>
-                </div>
-            <#list model["results"] as result>
-            <div class="table__contant">
-            <#--/*****************************игроки номер 1*************************************/-->
-                <div class="tab">
-                    <#list result.gameList as game>
-                       <div class="table__item">
+                    <td class="a"><span class="word"><span class="rotate">${model["resource"].getString("Score")}</span> </span><img class="icon" src="/img/snooker.png" alt=""></td>
+                    <td class="a"><span class="word"><span class="rotate">${model["resource"].getString("Deference")}</span></span><img class="icon" src="/img/pool.png" alt=""></td>
+                    </thead>
 
-                            <div class="table__name">
-                            ${game?counter}. ${game.idGamer}
-                                    <div class="table__control">
-                                        <#if result.dezhuril==false>
-                                            <div class="table__ok" data-toggle="modal" data-target="#dezhuril"></div>
-                                        <#else>
-                                            <div class="table__ok active" ></div>
-                                        </#if>
-                                        <div class="table__close" data-toggle="modal" data-target="#deletePlay-1"></div>
-            <!-- *************************************************************************************Удалить игрока********************************************************** -->
-                                        <div class="modal fade" id="deletePlay-1" tabindex="-1" role="dialog" aria-labelledby="deletePlayLabel" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title" style="color: black;" id="deletePlayLabel">Вы уверены,<br> что хотите удалить игрока?</h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <form class="rating-all__form" action="">
-                                                            <button type="submit" class="rating-all__button" formaction="/${model.competition.id}/${game.idGamer}/excludePartner">Да</button>
-                                                            <button type="button" class="rating-all__button" data-dismiss="modal" aria-label="Close">Нет</button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-            <!--****************************************************************************************** Дежурный *******************************************************************-->
-                                        <div class="modal fade" id="dezhuril" tabindex="-1" role="dialog" aria-labelledby="deletePlayLabel" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title" style="color: black;"  id="deleteTournamentLabel">Вы уверены,<br> что хотите отметить дежурным игрока?</h4>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <form class="rating-all__form" action="">
-                                                            <button type="submit" class="rating-all__button" formaction="/${model.competition.id}/${game.idGamer}/dezhurit">Да</button>
-                                                            <button type="button" class="rating-all__button" data-dismiss="modal" aria-label="Close">Нет</button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                            </div>
-                            <form name="myPoint" action="/${model.competition.id}/${game.idPartner2}/1/point" method="POST" modelAttribute="employee">
-                                <input class="table__input" type="text" name="point1" id="point1"  min="0" max="8"  onchange="this.form.submit()" value="<#if result.id==game.idGamer> - <#else>${game.point1}</#if>">
-                            </form>
-                            <div class="table__row">${result.agrBall}</div>
-                            <div class="table__row">${result.deference}</div>
-
-                       </div>
-                    </#list>
-                </div>
-            </#list>
-            </div>
-            </div>
-            <a href="#" class="rating-all__add"><img src="img/add.png" alt=""></a>
-
-            <!-- Добавить фото -->
-            <div class="modal photo fade" id="photo" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <form class="rating-all__form" method="post" enctype="multipart/form-data" action="/${model.competition.id}/uploading">
-                                <div class="rating-all__button" name="file">
-                                    <label for="file"  name="file" class="img">
-                                        <img src="/img/gallery.png" alt="">
-                                    </label>
-                                    <label for="file" name="file">Загрузить из галереи</label>
-
-                                    <input type="file" name="file" onchange="this.form.submit()" id="file" style="display:none;"/>
+                    <tbody>
+                        <#list model["results"] as result>
+                        <tr>
+                            <td><span class="rotate">${result.nick}</span></td>
+                            <td class="ctrln">
+                                <div class="table__control">
+                                    <#if result.dezhuril==false>
+                                        <div class="table__ok" data-toggle="modal" data-target="#dezhuril"></div>
+                                    <#else>
+                                        <div class="table__ok active" ></div>
+                                    </#if>
+                                    <div class="table__close"></div>
                                 </div>
-                                <button type="button" class="rating-all__button">
-                                    <div class="img"><img src="/img/photo-black.png" alt=""></div>
-                                    Сделать фото
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+
+                            </td>
+                            <#list result.gameList as gamer2>
+                                <td>
+                                    <#if result.id==gamer2.idGamer>
+                                        -
+                                    <#else>
+                                        <a href="/${gamer2.idCompetition}/${result.id}/${gamer2.idGamer}/point">
+                                            ${gamer2.point1}:${gamer2.point2}
+                                        </a>
+                                    </#if>
+                                </td>
+                            </#list>
+                                <td> ${result.agrBall}</td>
+                                <td> ${result.deference}</td>
+                            </tr>
+                        </#list>
+                        <tr>
+                            <td>
+                                <a href="/competition/${model.competition.id}/addGamers"><img src="/img/add.png" alt=""></a>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
             </div>
-
-            <!-- Удалить турнир -->
-            <div class="modal fade" id="deleteTournament" tabindex="-1" role="dialog" aria-labelledby="deleteTournamentLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="deleteTournamentLabel">Вы уверены,<br> что хотите удалить турнир?</h4>
-                        </div>
-                        <div class="modal-body">
-                            <form class="rating-all__form" action="">
-                                <button type="submit" class="rating-all__button" formaction="/delete/${model.competition.id}">Да</button>
-                                <button type="button" class="rating-all__button" data-dismiss="modal" aria-label="Close">Нет</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-
-        </div>
     </main>
 </div>
 
+
+
+
+<!-- Добавить фото -->
+<div class="modal photo fade" id="photo" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form class="rating-all__form" method="post" enctype="multipart/form-data" action="/${model.competition.id}/uploading">
+                    <div class="rating-all__button" name="file">
+                        <label for="file"  name="file" class="img">
+                            <img src="/img/gallery.png" alt="">
+                        </label>
+                        <label for="file" name="file">Загрузить из галереи</label>
+
+                        <input type="file" name="file" onchange="this.form.submit()" id="file" style="display:none;"/>
+                    </div>
+                    <button type="button" class="rating-all__button">
+                        <div class="img"><img src="/img/photo-black.png" alt=""></div>
+                        Сделать фото
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Удалить турнир -->
+<div class="modal fade" id="deleteTournament" tabindex="-1" role="dialog" aria-labelledby="deleteTournamentLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="deleteTournamentLabel">Вы уверены,<br> что хотите удалить турнир?</h4>
+            </div>
+            <div class="modal-body">
+                <form class="rating-all__form" action="">
+                    <button type="submit" class="rating-all__button" formaction="/delete/${model.competition.id}">Да</button>
+                    <button type="button" class="rating-all__button" data-dismiss="modal" aria-label="Close">Нет</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
 <script src="/js/vtornik.js"></script>
 </body>
 </html>

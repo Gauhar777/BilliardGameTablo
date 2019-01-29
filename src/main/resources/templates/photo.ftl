@@ -32,12 +32,10 @@
     <main class="main">
         <div class="photo">
             <div class="photo__header">
-                <a href="#" class="photo__icon"><img src="/img/camera.png" alt=""></a>
 
                 <h1>${model.competition.name}</h1>
 
                 <div class="photo__control">
-                    <a href="#"><img src="/img/edit.png" alt=""></a>
                     <a href="#"><img src="/img/close.png" alt=""></a>
                 </div>
 

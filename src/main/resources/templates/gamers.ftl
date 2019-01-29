@@ -56,7 +56,7 @@
                             <h4 class="modal-title" id="myModalLabel">Введите имя игрока</h4>
                         </div>
                         <div class="modal-body">
-                            <form class="tournament__form" action="/addGamers" method="POST">
+                            <form class="tournament__form" action="/${model.competition.id}/addGamers" method="POST">
                                 <input class="tournament__input" name="nick" type="text"/>
                                 <input class="tournament__submit"  type="submit" value="Ok"/>
                             </form>
