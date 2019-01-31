@@ -1,0 +1,10 @@
+@media screen and (min-width: 900px) and (max-width: 3000px) {
+    .icon{
+        display: none;
+    }
+}
+@media screen and  (max-width: 900px){
+    .word{
+        display: none;
+    }
+}
