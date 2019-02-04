@@ -2,9 +2,66 @@
     .icon{
         display: none;
     }
+
 }
 @media screen and  (max-width: 900px){
     .word{
+        display: none;
+    }
+
+    .main__header a {
+        font-size: 20px;
+    }
+
+    .rating-all__header, .rating-all__header h1 {
+        font-size: 24px;
+    }
+    .competitionControl{
+        width: 32px;
+        height: auto;
+    }
+    .icon{
+        width: 20px;
+    }
+    thead td,tbody td{
+        text-align: right;
+    }
+    tbody td:last-child,thead td:last-child{
+        width: 10%;
+    }
+    .gamer, tbody td:first-child{
+        text-align: left;
+        padding-left: 18px;
+    }
+    .js-edit{
+        margin-right: 18px;
+    }
+    .rating-all__icon{
+        left: 24px;
+    }
+    .rating-all__control{
+        right: 24px;
+    }
+    .main__header .arrow{
+        font-size: 30px;
+    }
+    .main__header a.arrow:after{
+        width: 50px;
+        height: 20px;
+        vertical-align: middle;
+        background-size: contain;
+    }
+
+    .tournament__btn{
+        font-size: 30px;
+    }
+    .main__title{
+        font-size: 36px;
+    }
+}
+
+@media screen and  (max-width: 350px){
+    .main__header a.arrow:after,.tournament__btn:after{
         display: none;
     }
 }

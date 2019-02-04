@@ -1,5 +1,6 @@
 package kz.ivc.games.controller;
 
+import javafx.beans.binding.ListBinding;
 import kz.ivc.games.dto.GamerForm;
 import kz.ivc.games.dto.GamerOfCompetition;
 import kz.ivc.games.dto.BestGamersDTO;
@@ -39,52 +40,39 @@ public class GamerController {
         this.partnerRepo=partnerRepo;
         this.dezhurnyRepo=dezhurnyRepo;
     }
+    //*********************************************************ShowGamersList*******************************************
 
-    /*    @GetMapping("/gamers")
-        public String gamers(@ModelAttribute("model") ModelMap model) {
-            List<Gamer> gamerList = this.gamerRepo.findAll();
-            model.addAttribute("gamers", gamerList);
-            return "gamers";
-        }
-    */
-
-    //***************************************************ShowGamers*********************************
     @RequestMapping(value = "/competition/{idCompetition}/addGamers", method = RequestMethod.GET)
-    public String signInCompetitionFormGet(@ModelAttribute("model") ModelMap model,
-                                           GamerForm gamerForm,@PathVariable Long idCompetition) {
-
-        Competition competition = this.competitationRepo.getOne(idCompetition);
-
-        model.put("competition", competition);
-
+    public String showAllGamers (@ModelAttribute("model") ModelMap model,@PathVariable Long idCompetition){
         model.addAttribute("resource",resource);
+        Competition competition=this.competitationRepo.getOne(idCompetition);
+        model.put("competition",competition);
 
-        List<GamerOfCompetition> answer=new ArrayList<>();
-
+        List<GamerOfCompetition> gamers=new ArrayList<>();
         List<Gamer> gamerList = this.gamerRepo.findAll();
         for (Gamer gamer : gamerList) {
             GamerOfCompetition gamerOfCompetition = new GamerOfCompetition();
-
             gamerOfCompetition.setNick(gamer.getNick());
             gamerOfCompetition.setIdGamer(gamer.getId());
-            Partner partner=this.partnerRepo.findByIdCompetitionAndIdGamer(idCompetition,gamer.getId());
-            if(partner!=null) {
+            Partner parner=this.partnerRepo.findByIdCompetitionAndIdGamer(idCompetition,gamer.getId());
+            if (parner!=null){
                 gamerOfCompetition.setChoosed(true);
             }else{
                 gamerOfCompetition.setChoosed(false);
             }
-            Dezhurny dezhurny=this.dezhurnyRepo.findByIdCompetitionAndIdGamer(idCompetition,gamer.getId());
-            if(dezhurny!=null){
-                gamerOfCompetition.setDezhuril(true);
-            }else{
-                gamerOfCompetition.setDezhuril(false);
-            }
-            answer.add(gamerOfCompetition);
+            gamers.add(gamerOfCompetition);
+            model.put("gamers",gamers);
         }
 
-        model.addAttribute("answers", answer);
         return "gamers";
     }
+
+
+
+
+
+
+
 
     //*****************************************Select Partners********************************************
 
@@ -127,29 +115,20 @@ public class GamerController {
     }
 
     //*********************************************************NewGamer*******************************************
-    /*@GetMapping("{idC}/addGamers")
-    public String formGet(@ModelAttribute("model") ModelMap model,@PathVariable Long idC) {
-        Competition competition = this.competitationRepo.getOne(idC);
-        model.put("competition", competition);
 
-        model.addAttribute("gamerForm", new GamerForm());
+    @RequestMapping(value = {"{idC}/addGamers"}, method = RequestMethod.POST)
+    public String gamersSave(ModelMap model,@PathVariable Long idC,GamerForm gamerForm) {
 
-        model.addAttribute("resource",resource);
+        Gamer newGamer= new Gamer();
 
-        return "addGamers";
-    }*/
-
-
-
-    @RequestMapping(value = {"/addGamers"}, method = RequestMethod.POST)
-    public String gamersSave( GamerForm gamersForm,ModelMap model) {
-        String nick=gamersForm.getNick();
-        Gamer newGamer =new Gamer();
-        if (nick != null && nick.length() > 0) {
+        String nick=gamerForm.getNick();
+//        System.out.println("************/nick "+nick+"/*********");
+        if (nick!=null && nick.length()>0) {
             newGamer.setNick(nick);
             this.gamerRepo.save(newGamer);
         }
-        return "gamers";
+
+        return "redirect:/competition/{idC}/addGamers";
     }
 
 
@@ -164,26 +143,6 @@ public class GamerController {
             model.put("mess",mess);
             return "messages";
         }
-        return "redirect:/competition/{idC}/addGamers";
-    }
-    //***********************************************Dezhurny********************************************
-
-    @RequestMapping(value = "{idC}/{idGamer}/dezhurit", method = RequestMethod.GET)
-    public String dezhuritGamer( @PathVariable Long idC,@PathVariable Long idGamer ) {
-        Dezhurny dezhurny=new Dezhurny();
-        dezhurny.setIdCompetition(idC);
-        dezhurny.setIdGamer(idGamer);
-        this.dezhurnyRepo.save(dezhurny);
-        return "redirect:/competition/{idC}/addGamers";
-    }
-
-
-
-    @RequestMapping(value = "{idC}/{idGamer}/cancellDezhurny", method = RequestMethod.GET)
-    public String deleteDezhurny( @PathVariable Long idC,@PathVariable Long idGamer ) {
-        Dezhurny dezhurny=this.dezhurnyRepo.findByIdCompetitionAndIdGamer(idC,idGamer);
-        this.dezhurnyRepo.delete(dezhurny);
-
         return "redirect:/competition/{idC}/addGamers";
     }
 

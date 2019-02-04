@@ -17,8 +17,8 @@ public class Dezhurny implements Serializable {
     @Column(name = "id_gamer")
     private Long idGamer;
 
-    @Column(name = "time")
-    private Long time;
+//    @Column(name = "time")
+//    private Long time;
 
     @Column(name="id_competition")
     private Long idCompetition;
@@ -43,13 +43,13 @@ public class Dezhurny implements Serializable {
         this.idGamer = idGamer;
     }
 
-    public Long getTime() {
-        return time;
-    }
-
-    public void setTime(Long time) {
-        this.time = time;
-    }
+//    public Long getTime() {
+//        return time;
+//    }
+//
+//    public void setTime(Long time) {
+//        this.time = time;
+//    }
 
     public Long getIdCompetition() {
         return idCompetition;

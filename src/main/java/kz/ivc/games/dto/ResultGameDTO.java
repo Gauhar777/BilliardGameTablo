@@ -8,9 +8,28 @@ public class ResultGameDTO implements Serializable {
     private long idGamer;
     private long idCompetition;
     private long id;
-    private String nick;
+    private String nickOfPartner2;
+    //private String nickPartner2;
     private long point1;
     private long point2;
+    private long idPartner2;
+
+
+    public String getNickOfPartner2() {
+        return nickOfPartner2;
+    }
+
+    public void setNickOfPartner2(String nickOfPartner2) {
+        this.nickOfPartner2 = nickOfPartner2;
+    }
+
+    public long getIdPartner2() {
+        return idPartner2;
+    }
+
+    public void setIdPartner2(long idPartner2) {
+        this.idPartner2 = idPartner2;
+    }
 
     public long getIdGamer() {
         return idGamer;
@@ -36,13 +55,6 @@ public class ResultGameDTO implements Serializable {
         this.id = id;
     }
 
-    public String getNick() {
-        return nick;
-    }
-
-    public void setNick(String nick) {
-        this.nick = nick;
-    }
 
     public long getPoint1() {
         return point1;
@@ -59,4 +71,6 @@ public class ResultGameDTO implements Serializable {
     public void setPoint2(long point2) {
         this.point2 = point2;
     }
+
+
 }

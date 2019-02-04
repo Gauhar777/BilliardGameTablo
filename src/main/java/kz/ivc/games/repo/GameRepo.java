@@ -14,4 +14,5 @@ public interface GameRepo extends JpaRepository<Game,Long> {
     List<Game> findByIdPartner2AndIdCompetition(long IdPartner2,long IdCompetition);
     List<Game> findByIdPartner1(Long idPartner1);
     List<Game> findByIdPartner2(Long idPartner1);
+    List<Game> findByIdCompetition(Long idCompetition);
 }

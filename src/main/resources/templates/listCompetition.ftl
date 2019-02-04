@@ -47,6 +47,6 @@
     </main>
 </div>
 
-<script src="js/vtornik.js"></script>
+<script src="/js/vtornik.js"></script>
 </body>
 </html>

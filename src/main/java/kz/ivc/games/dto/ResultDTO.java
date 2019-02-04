@@ -1,6 +1,7 @@
 package kz.ivc.games.dto;
 
 import kz.ivc.games.entity.Game;
+import kz.ivc.games.entity.Gamer;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -11,11 +12,21 @@ public class ResultDTO implements Serializable {
     private long id;
     private String nick;
     private List<ResultGameDTO> gameList;
-    private  boolean dezhuril;
+    private  String dezhuril;
+    private  String nick2;
     private int agrBall;
     private long agrPoint1;
     private long agrPoint2;
     private long deference;
+    private long idPartner1;
+
+    public long getIdPartner1() {
+        return idPartner1;
+    }
+
+    public void setIdPartner1(long idGamer1) {
+        this.idPartner1= idPartner1;
+    }
 
     public int getAgrBall() {
         return agrBall;
@@ -73,11 +84,19 @@ public class ResultDTO implements Serializable {
         this.deference = deference;
     }
 
-    public boolean isDezhuril() {
+    public String getDezhuril() {
         return dezhuril;
     }
 
-    public void setDezhuril(boolean dezhuril) {
+    public void setDezhuril(String dezhuril) {
         this.dezhuril = dezhuril;
+    }
+
+    public String getNick2() {
+        return nick2;
+    }
+
+    public void setNick2(String nick2) {
+        this.nick2 = nick2;
     }
 }

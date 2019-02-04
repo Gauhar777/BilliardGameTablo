@@ -56,5 +56,6 @@
             <button type="submit" class="btn btn-primary btn-lg" >${model["resource"].getString("Add new gamer")}</button>
         </form>
 </div>
+<script src="js/vtornik.js"></script>
 </body>
 </html>

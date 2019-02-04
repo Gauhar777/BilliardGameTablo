@@ -25,6 +25,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <link rel="stylesheet" href="/css/vtornik.css">
+    <link rel="stylesheet" href="/css/vtornikMedia.css">
 </head>
 <body>
 <div class="wrp">
@@ -32,7 +33,7 @@
         <form id="new-tournament" class="new-tournament" name="comp"  method="POST">
             <input id="name" name="name" class="new-tournament__input" type="text" placeholder="Название турнира"/>
             <button type="submit" class="new-tournament__add" formaction="/addCompetition2">Добавить игроков</button>
-            <input class="new-tournament__btn" type="submit" formaction="/addCompetition" value="Сохранить"/>
+            <input class="create-tournament__btn" type="submit" formaction="/addCompetition" value="Сохранить"/>
         </form>
     </main>
 </div>

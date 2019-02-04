@@ -25,6 +25,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <link rel="stylesheet" href="/css/vtornik.css">
+    <link rel="stylesheet" href="/css/vtornikMedia.css">
 </head>
 <body>
 <div class="wrp">
@@ -35,17 +36,32 @@
         <h1 class="main__title">Общий список игроков</h1>
         <div class="tournament">
 
-            <a href="#" class="tournament__btn" data-toggle="modal" data-target="#myModal">Добавить нового игрока</a>
-        <#list model["answers"] as answer>
-            <ul class="tournament__list">
-            <#if answer.choosed==false>
-                <li><a href="/${model.competition.id}/${answer.idGamer}/choosePartner" class="js-tournament">${answer.nick}</a></li>
-            <#else>
-                <li><a href="/${model.competition.id}/${answer.idGamer}/excludePartner" class="ok js-tournament">${answer.nick}</a></li>
+
+
+
+
+
+            <a href="#" class="tournament__btn" data-toggle="modal" data-target="#myModal">Новый игрок</a>
+
+            <#if model["gamers"]?has_content>
+                <#list model["gamers"] as gamer>
+                        <ul class="tournament__list">
+                        <#if gamer.choosed==false>
+                            <li><a href="/${model.competition.id}/${gamer.idGamer}/choosePartner" class="js-tournament">${gamer.nick}</a></li>
+                        <#else>
+                            <li><a href="/${model.competition.id}/${gamer.idGamer}/excludePartner" class="ok js-tournament">${gamer.nick}</a></li>
+                        </#if>
+                    </ul>
+                </#list>
             </#if>
-            </ul>
-        </#list>
             <a href="/Competition/${model.competition.id}/showGames" class="tournament__btn ok">ОК</a>
+
+
+
+
+
+
+
 
             <!-- Добавить нового игрока -->
             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -56,17 +72,15 @@
                             <h4 class="modal-title" id="myModalLabel">Введите имя игрока</h4>
                         </div>
                         <div class="modal-body">
-                            <form class="tournament__form" action="/${model.competition.id}/addGamers" method="POST">
-                                <input class="tournament__input" name="nick" type="text"/>
+                            <form class="tournament__form" method="POST"  action="/${model.competition.id}/addGamers">
+                                <input class="tournament__input" name="nick" id="nick"  type="text"/>
                                 <input class="tournament__submit"  type="submit" value="Ok"/>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
-</div>
+
 
 <script src="/js/vtornik.js"></script>
 </body>

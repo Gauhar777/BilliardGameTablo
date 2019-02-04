@@ -82,7 +82,7 @@ public class GameController {
             agrBall = 0;
             agrPoint1 = 0;  // salgan sharlar sany
             agrPoint2 = 0;  // jibergen sharlar sany
-            boolean dezh=false;
+
 
             //*********По партнерам найтти имена играков1
             ResultDTO resultDTO = new ResultDTO();
@@ -99,6 +99,12 @@ public class GameController {
 
                 if (partner1.getId() != partner2.getId()) {
 
+                    Gamer gamer2 = this.gamerRepo.getOne(partner2.getIdGamer());
+                    Long idGamer=gamer2.getId();
+                    Gamer gamer=this.gamerRepo.findOne(idGamer);
+                    String nick=gamer.getNick();
+                    resultGameDTO.setNickOfPartner2(nick);
+
                     //******Create game where play Gamer1 and Gamer2
                     Game game=this.gameRepo.findByIdPartner1AndIdPartner2AndIdCompetition(partner1.getId(), partner2.getId(), idCompetition);
                     Game gameMirror = this.gameRepo.findByIdPartner1AndIdPartner2AndIdCompetition(partner2.getId(), partner1.getId(), idCompetition);
@@ -108,14 +114,10 @@ public class GameController {
                     if (game != null) {
                         resultGameDTO.setId(game.getId());
 
-                        Gamer gamer2 = this.gamerRepo.getOne(partner2.getIdGamer());
-                        Dezhurny dezhurny=this.dezhurnyRepo.findByIdCompetitionAndIdGamer(idCompetition,3L);
-                        if(dezhurny!=null){
-                            dezh=true;
-                        }
-                        resultGameDTO.setNick(gamer2.getNick());
+
+
                         resultGameDTO.setId(game.getId());
-                        resultGameDTO.setIdGamer(gamer2.getId());
+                        resultGameDTO.setIdGamer(idGamer);
                         resultGameDTO.setIdCompetition(idCompetition);
                         resultGameDTO.setPoint1(game.getPoint1());
                         resultGameDTO.setPoint2(game.getPoint2());
@@ -130,11 +132,16 @@ public class GameController {
                     } else {
 
                         if (gameMirror != null) {
+
+//                            Gamer gamer2 = this.gamerRepo.getOne(partner2.getIdGamer());
+//                            Long idGamer=gamer2.getId();
+
                             long idGame = gameMirror.getId();
-                            Gamer gamer2 = this.gamerRepo.getOne(partner2.getIdGamer());
                             resultGameDTO.setId(idGame);
-                            resultGameDTO.setIdGamer(partner2.getIdGamer());
-                            resultGameDTO.setNick(gamer2.getNick());
+                            resultGameDTO.setIdGamer(idGamer);
+//                            Gamer gamer=this.gamerRepo.findOne(idGamer);
+//                            String nick=gamer.getNick();
+  //                          resultGameDTO.setNickOfPartner2(nick);
                             resultGameDTO.setIdCompetition(idCompetition);
 
                             resultGameDTO.setPoint1(gameMirror.getPoint2());
@@ -150,7 +157,6 @@ public class GameController {
                             //resultGameDTO.setNick(gamer2.getNick());
                             //resultGameDTO.setId(newGame.getId());
                             resultGameDTO.setIdGamer(partner2.getIdGamer());
-                            resultGameDTO.setNick(gamer1.getNick());
                             resultGameDTO.setIdCompetition(idCompetition);
                         }
                     }
@@ -160,7 +166,11 @@ public class GameController {
 
                 resultGameDTOS.add(resultGameDTO);
             }
-            resultDTO.setDezhuril(dezh);
+            Dezhurny dezhurny=this.dezhurnyRepo.findByIdCompetitionAndIdGamer(idCompetition,partner1.getIdGamer());
+            if(dezhurny==null){
+                String dezh="nedezhuril";
+                resultDTO.setDezhuril(dezh);
+            }
             resultDTO.setAgrPoint1(agrPoint1);
             resultDTO.setAgrPoint2(agrPoint2);
 
@@ -182,12 +192,12 @@ public class GameController {
         resultDTOList.sort(Comparator.comparing(ResultDTO::getAgrBall)
                 .reversed()
                 .thenComparing(Comparator.comparing(ResultDTO::getDeference)
-                .reversed()) );
+                        .reversed()) );
         LOG.info("***********************1");
         for (ResultDTO resultDTO : resultDTOList) {
             LOG.info(resultDTO.getNick());
             for (ResultGameDTO dto : resultDTO.getGameList()) {
-                LOG.info("     "+dto.getNick() + " " + dto.getId() + " " + dto.getIdGamer());
+                LOG.info("     "+dto.getNickOfPartner2() + " " + dto.getId() + " " + dto.getIdGamer());
             }
         }
         LOG.info("***********************2");
@@ -210,7 +220,7 @@ public class GameController {
             });
             LOG.info("***********************3");
             for (ResultGameDTO dto : resultDTO.getGameList()) {
-                LOG.info(dto.getNick()+" "+dto.getId()+" "+dto.getIdGamer());
+                LOG.info(dto.getNickOfPartner2()+" "+dto.getId()+" "+dto.getIdGamer());
             }
         }
 
@@ -223,4 +233,3 @@ public class GameController {
     }
 
 }
-

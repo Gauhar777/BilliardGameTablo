@@ -15,10 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 @Controller
 public class CompititionController {
@@ -49,8 +46,13 @@ public class CompititionController {
 
     @RequestMapping(value = "/main2", method = {RequestMethod.GET,RequestMethod.POST})
     public ModelAndView main2(Model model, final HttpServletRequest request) {
+
             List<Competition> competitionList = this.competitationRepo.findAll();
+            competitionList.sort(Comparator.comparing(Competition::getId).reversed());
+
+
             model.addAttribute("competitionList", competitionList);
+
 
             model.addAttribute("resource", resource);
 

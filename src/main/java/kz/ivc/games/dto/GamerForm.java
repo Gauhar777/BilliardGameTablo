@@ -6,7 +6,6 @@ package kz.ivc.games.dto;
 public class GamerForm {
 
     private String Id;
-
     private String nick;
 
 
@@ -15,9 +14,8 @@ public class GamerForm {
     }
 
     public void setId(String id) {
-        Id = id;
+        this.Id = Id;
     }
-
 
     public String getNick() {
         return nick;

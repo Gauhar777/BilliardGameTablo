@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
 
@@ -68,23 +69,26 @@ public class PhotoController {
             newPhoto.setName(resFileName);
             photoRepo.save(newPhoto);
         }else if (photo!=null){
+            String existsPhoto=photo.getName();
+//            Path dir="Path(file:/"+uploadPath+"/"+existsPhoto)
+//            Files.deleteIfExists("file:/"+uploadPath+"/"+existsPhoto);
             photo.setName(resFileName);
             photoRepo.save(photo);
         }
         file.transferTo(new File(uploadPath+"/"+resFileName));
         n=this.competitationRepo.findOne(idC);
-        return "redirect:/photo";
+        return "redirect:/{idC}/photo";
     }
 
-    @GetMapping("/photo")
-    public String getPhoto(@ModelAttribute("model") ModelMap model){
-        Competition competition=n;
-        Long idC=competition.getId();
-        Photo photo = photoRepo.findByIdCompetition(idC);
-        model.put("photo", photo);
-        model.put("competition", competition);
-        return "photo";
-    }
+//    @GetMapping("/photo")
+//    public String getPhoto(@ModelAttribute("model") ModelMap model){
+//        Competition competition=n;
+//        Long idC=competition.getId();
+//        Photo photo = photoRepo.findByIdCompetition(idC);
+//        model.put("photo", photo);
+//        model.put("competition", competition);
+//        return "photo";
+//    }
 
     @GetMapping("/{idCom}/photo")
     public String getPhoto2(@ModelAttribute("model") ModelMap model,@PathVariable Long idCom){
@@ -95,5 +99,15 @@ public class PhotoController {
 
         return "photo";
     }
+
+    @PostMapping("/{idC}/deletePhoto")
+    public  String deletePhoto(@ModelAttribute("model") ModelMap model,@PathVariable Long idC){
+
+
+
+        return "redirect:/{idC}/photo";
+    }
+
+
 
 }

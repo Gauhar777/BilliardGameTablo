@@ -4,10 +4,7 @@ import kz.ivc.games.dto.Form;
 import kz.ivc.games.dto.GamerForm;
 import kz.ivc.games.dto.GamerOfCompetition;
 import kz.ivc.games.entity.*;
-import kz.ivc.games.repo.CompetitationRepo;
-import kz.ivc.games.repo.DezhurnyRepo;
-import kz.ivc.games.repo.GamerRepo;
-import kz.ivc.games.repo.PartnerRepo;
+import kz.ivc.games.repo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,53 +24,66 @@ public class HelloController {
     @Autowired
     private final CompetitationRepo competitationRepo;
     private final PartnerRepo partnerRepo;
+    private final PhotoRepo photoRepo;
     @Autowired
     private final GamerRepo gamerRepo;
+    private final GameRepo gameRepo;
     private final DezhurnyRepo dezhurnyRepo;
     private Logger LOG = LoggerFactory.getLogger(HelloController.class);
 
-    public HelloController(CompetitationRepo competitationRepo, PartnerRepo partnerRepo, GamerRepo gamerRepo, DezhurnyRepo dezhurnyRepo) {
+    public HelloController(CompetitationRepo competitationRepo, PartnerRepo partnerRepo, GamerRepo gamerRepo, GameRepo gameRepo , DezhurnyRepo dezhurnyRepo,PhotoRepo photoRepo) {
         this.competitationRepo = competitationRepo;
         this.partnerRepo = partnerRepo;
         this.gamerRepo = gamerRepo;
+        this.gameRepo=gameRepo;
         this.dezhurnyRepo = dezhurnyRepo;
+        this.photoRepo=photoRepo;
+        //this.
     }
-
-    //***********************************Show Competition*******************************************************
-
-    /*@GetMapping("/main")
-    public String hello(@ModelAttribute("model") ModelMap model, @RequestParam(value = "name", required = false, defaultValue = "World") String name) {
-        List<Competition> competitionList = this.competitationRepo.findAllByOrderByIdDesc();
-        model.addAttribute("competitionList", competitionList);
-
-        model.addAttribute("resource",resource);
-
-        return "main";
-    }
-
-*/
-
-
-    @GetMapping("/main")
-    public String home(@ModelAttribute("model") ModelMap model,
-                       @RequestParam(value = "name", required = false, defaultValue = "World") String name) {
-        model.addAttribute("resource",resource);
-        return "home";
-    }
-
 
 //***********************************DELETE Competition*******************************************************
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
 
     public String deleteCompetition(@PathVariable Long id,@ModelAttribute("model") ModelMap model) {
+
+            Photo photoOfCompetition=this.photoRepo.findByIdCompetition(id);
+            List<Dezhurny>  dezhurnyOfCompetition=this.dezhurnyRepo.findByIdCompetition(id);
+
+
+        List<Partner> partnerOfCompetition=this.partnerRepo.findByIdCompetition(id);
+        List<Game> gameOfCompetition=this.gameRepo.findByIdCompetition(id);
+
+
      try {
-         Competition competition = this.competitationRepo.getOne(id);
-         this.competitationRepo.delete(competition);
-     }catch (Exception ex){
+         if (photoOfCompetition!=null){
+             this.photoRepo.delete(photoOfCompetition);
+         }
+
+
+         for (Game game:gameOfCompetition){
+             this.gameRepo.delete(game);
+         }
+
+         if(partnerOfCompetition!=null){
+             for (Partner partner:partnerOfCompetition){
+                 this.partnerRepo.delete(partner);
+             }
+         }
+
+             for (Dezhurny dezh:dezhurnyOfCompetition){
+                 this.dezhurnyRepo.delete(dezh);
+             }
+     }
+
+     catch (Exception ex)
+
+     {
          model.put("mess","Competition did not finish!");
          return "messages";
      }
+        Competition competition = this.competitationRepo.getOne(id);
+        this.competitationRepo.delete(competition);
         return "redirect:/main2";
     }
 
@@ -120,7 +130,7 @@ public class HelloController {
             competition.setName(name);
             this.competitationRepo.save(competition);
             n=competition;
-            return "redirect:/addGamers";
+            return "redirect:/competition/"+n.getId()+"/addGamers";
         } else {
             /*
             String error = "Name is required!";
@@ -146,6 +156,7 @@ public class HelloController {
 
         Competition competition = new Competition();
         String name = form.getName();
+
         if (name != null && name.length() > 0) {
             competition.setName(name);
             this.competitationRepo.save(competition);
@@ -160,6 +171,7 @@ public class HelloController {
     }
 
     public Competition n=null;
+
     @RequestMapping(value = {"/addCompetition2"}, method = RequestMethod.POST)
     public String addCompetition2(Model model, Form form) {
 
@@ -168,56 +180,22 @@ public class HelloController {
         if (name != null && name.length() > 0) {
             competition.setName(name);
             this.competitationRepo.save(competition);
+            return "redirect:/competition/"+n.getId()+"/addGamers";
         }
         n=this.competitationRepo.findIdByName(form.getName());
+        return "addCompetition";
+
+
         /*else {
             String error = "Name is required!";
             model.addAttribute("errorMessage", error);
 
         }*/
-        return "redirect:/addGamers";
+
     }
 
 
 
-
-    //***************************************************ShowGamers*********************************
-    @RequestMapping(value = "/addGamers", method = RequestMethod.GET)
-    public String signInCompetitionFormGet(@ModelAttribute("model") ModelMap model,   GamerForm gamerForm) {
-        Competition competition = n;
-        Long idCompetition=n.getId();
-        model.put("competition", competition);
-
-        model.addAttribute("resource",resource);
-
-        List<GamerOfCompetition> answer=new ArrayList<>();
-
-        List<Gamer> gamerList = this.gamerRepo.findAll();
-        for (Gamer gamer : gamerList) {
-            GamerOfCompetition gamerOfCompetition = new GamerOfCompetition();
-
-            gamerOfCompetition.setNick(gamer.getNick());
-            gamerOfCompetition.setIdGamer(gamer.getId());
-            Partner partner=this.partnerRepo.findByIdCompetitionAndIdGamer(idCompetition,gamer.getId());
-            if(partner!=null) {
-                gamerOfCompetition.setChoosed(true);
-            }else{
-                gamerOfCompetition.setChoosed(false);
-            }
-            Dezhurny dezhurny=this.dezhurnyRepo.findByIdCompetitionAndIdGamer(idCompetition,gamer.getId());
-            if(dezhurny!=null){
-                gamerOfCompetition.setDezhuril(true);
-            }else{
-                gamerOfCompetition.setDezhuril(false);
-            }
-            answer.add(gamerOfCompetition);
-        }
-
-        model.addAttribute("answers", answer);
-        return "gamers";
-    }
-
-    
     //*******************************************FromErrorPageToBack******************************
     @RequestMapping(value = {"/messages"}, method = RequestMethod.POST)
     public String goBack(Model model, Form form, HttpServletRequest request) {

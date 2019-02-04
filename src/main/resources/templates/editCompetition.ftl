@@ -33,7 +33,7 @@
             <input name="id"  type="hidden" value="${model.competition.id}" />
             <input id="name" name="name" class="new-tournament__input" type="text" value="${model.competition.name}"/>
             <button type="submit" class="new-tournament__add" formaction="/ediCompetition2">Добавить игроков</button>
-            <input class="new-tournament__btn" type="submit" formaction="/editCompetitionSave" value="Изменить"/>
+            <input class="create-tournament__btn" type="submit" formaction="/editCompetitionSave" value="Изменить"/>
         </form>
 </div>
 <script src="/js/vtornik.js"></script>
