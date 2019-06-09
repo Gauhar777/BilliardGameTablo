@@ -47,10 +47,13 @@ public class GameController {
 
     //***********************************GameCompetition*******************************************************
 
+    public Long idOfBestGamer;
+    public  List<ResultGameDTO> winner;
     @RequestMapping(value = "/Competition/{idCompetition}/showGames", method = RequestMethod.GET)
     public String showGame(@ModelAttribute("model") ModelMap model, @PathVariable Long idCompetition,final HttpServletRequest request) {
-        Photo photo=this.photoRepo.findByIdCompetition(idCompetition);
+        List<Photo> photos=this.photoRepo.findByIdCompetition(idCompetition);
         String container="ContainerIsEmpty";
+        Photo photo = photos.size() > 0 ? photos.get(0) : null;
         if (photo==null){
             model.put("container",container);
         }
@@ -61,7 +64,7 @@ public class GameController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
-        LOG.info("userName="+userName+" "+authentication.isAuthenticated());
+       // LOG.info("userName="+userName+" "+authentication.isAuthenticated());
         model.put("isAuthenticated",!userName.equals("anonymousUser"));
 
 
@@ -184,7 +187,7 @@ public class GameController {
          */
 
             resultDTO.setGameList(resultGameDTOS);
-            LOG.info("*****this is gameList"+resultGameDTOS);
+         //   LOG.info("*****this is gameList"+resultGameDTOS);
             resultDTOList.add(resultDTO);
         }
 
@@ -193,14 +196,20 @@ public class GameController {
                 .reversed()
                 .thenComparing(Comparator.comparing(ResultDTO::getDeference)
                         .reversed()) );
-        LOG.info("***********************1");
-        for (ResultDTO resultDTO : resultDTOList) {
-            LOG.info(resultDTO.getNick());
-            for (ResultGameDTO dto : resultDTO.getGameList()) {
-                LOG.info("     "+dto.getNickOfPartner2() + " " + dto.getId() + " " + dto.getIdGamer());
-            }
+
+        if (!resultDTOList.isEmpty()) {
+            idOfBestGamer=resultDTOList.get(0).getId();
+            System.out.print("///////////////////////////////////////" + idOfBestGamer);
         }
-        LOG.info("***********************2");
+
+//        LOG.info("***********************1");
+       // for (ResultDTO resultDTO : resultDTOList) {
+            //LOG.info(resultDTO.getNick());
+//            for (ResultGameDTO dto : resultDTO.getGameList()) {
+//                LOG.info("     "+dto.getNickOfPartner2() + " " + dto.getId() + " " + dto.getIdGamer());
+//            }
+   //     }
+//        LOG.info("***********************2");
         for (ResultDTO resultDTO : resultDTOList) {
             resultDTO.getGameList().sort((o1, o2) -> {
                 int answer=0;
@@ -218,10 +227,10 @@ public class GameController {
                 }
                 return answer;
             });
-            LOG.info("***********************3");
-            for (ResultGameDTO dto : resultDTO.getGameList()) {
-                LOG.info(dto.getNickOfPartner2()+" "+dto.getId()+" "+dto.getIdGamer());
-            }
+//            LOG.info("***********************3");
+//            for (ResultGameDTO dto : resultDTO.getGameList()) {
+//                LOG.info(dto.getNickOfPartner2()+" "+dto.getId()+" "+dto.getIdGamer());
+//            }
         }
 
 
@@ -231,5 +240,9 @@ public class GameController {
         model.addAttribute("results", resultDTOList);
         return "games";
     }
+
+
+
+
 
 }

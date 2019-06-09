@@ -7,7 +7,15 @@ public class GamerOfCompetition {
     private String nick;
     private boolean choosed;
     private long idGamer;
+    private int agrGame;
 
+    public int getAgrGame() {
+        return agrGame;
+    }
+
+    public void setAgrGame(int agrGame) {
+        this.agrGame = agrGame;
+    }
 
     public String getNick() {
         return nick;

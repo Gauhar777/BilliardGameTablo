@@ -8,6 +8,8 @@ import kz.ivc.games.repo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -31,57 +33,73 @@ public class HelloController {
     private final DezhurnyRepo dezhurnyRepo;
     private Logger LOG = LoggerFactory.getLogger(HelloController.class);
 
-    public HelloController(CompetitationRepo competitationRepo, PartnerRepo partnerRepo, GamerRepo gamerRepo, GameRepo gameRepo , DezhurnyRepo dezhurnyRepo,PhotoRepo photoRepo) {
+    public HelloController(CompetitationRepo competitationRepo, PartnerRepo partnerRepo, GamerRepo gamerRepo, GameRepo gameRepo, DezhurnyRepo dezhurnyRepo, PhotoRepo photoRepo) {
         this.competitationRepo = competitationRepo;
         this.partnerRepo = partnerRepo;
         this.gamerRepo = gamerRepo;
-        this.gameRepo=gameRepo;
+        this.gameRepo = gameRepo;
         this.dezhurnyRepo = dezhurnyRepo;
-        this.photoRepo=photoRepo;
+        this.photoRepo = photoRepo;
         //this.
     }
+    //*****************************************Admin***************************************************************************
+
+    @RequestMapping(value = "/",method = RequestMethod.GET)
+    public String getAdmission(@ModelAttribute("model") ModelMap model){
+        model.addAttribute("resource", resource);
+        return "admission";
+    }
+
+    @RequestMapping(value = "/chooseList")
+    public String chooseList(@ModelAttribute("model") ModelMap model){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+        LOG.info("userName="+userName+" "+authentication.isAuthenticated());
+        model.put("isAuthenticated",!userName.equals("anonymousUser"));
+        model.addAttribute("resource", resource);
+        return "chooseList";
+    }
+
+
+
+
+
 
 //***********************************DELETE Competition*******************************************************
 
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/delete/{id}")
 
-    public String deleteCompetition(@PathVariable Long id,@ModelAttribute("model") ModelMap model) {
-
-            Photo photoOfCompetition=this.photoRepo.findByIdCompetition(id);
-            List<Dezhurny>  dezhurnyOfCompetition=this.dezhurnyRepo.findByIdCompetition(id);
-
-
-        List<Partner> partnerOfCompetition=this.partnerRepo.findByIdCompetition(id);
-        List<Game> gameOfCompetition=this.gameRepo.findByIdCompetition(id);
+    public String deleteCompetition(@PathVariable Long id, @ModelAttribute("model") ModelMap model) {
+ //       Photo photoOfCompetition = photos.size() > 0 ? photos.get(0) : null;
+//        Photo photoOfCompetition=photos.get(0);
+        Dezhurny dezhurnyOfCompetition = this.dezhurnyRepo.findByIdCompetition(id);
 
 
-     try {
-         if (photoOfCompetition!=null){
-             this.photoRepo.delete(photoOfCompetition);
-         }
+        List<Partner> partnerOfCompetition = this.partnerRepo.findByIdCompetition(id);
+        List<Game> gameOfCompetition = this.gameRepo.findByIdCompetition(id);
 
 
-         for (Game game:gameOfCompetition){
-             this.gameRepo.delete(game);
-         }
+        if (!this.photoRepo.findByIdCompetition(id).isEmpty()) {
+            List<Photo> photos = this.photoRepo.findByIdCompetition(id);
+            for (Photo photoOfCompetition:photos) {
+                    this.photoRepo.delete(photoOfCompetition);
+                }
+            }
 
-         if(partnerOfCompetition!=null){
-             for (Partner partner:partnerOfCompetition){
-                 this.partnerRepo.delete(partner);
-             }
-         }
 
-             for (Dezhurny dezh:dezhurnyOfCompetition){
-                 this.dezhurnyRepo.delete(dezh);
-             }
-     }
+            for (Game game : gameOfCompetition) {
+                this.gameRepo.delete(game);
+            }
 
-     catch (Exception ex)
+            if (partnerOfCompetition != null) {
+                for (Partner partner : partnerOfCompetition) {
+                    this.partnerRepo.delete(partner);
+                }
+            }
+            if(this.dezhurnyRepo.findByIdCompetition(id)!=null){
+                this.dezhurnyRepo.delete(dezhurnyOfCompetition);
+            }
 
-     {
-         model.put("mess","Competition did not finish!");
-         return "messages";
-     }
         Competition competition = this.competitationRepo.getOne(id);
         this.competitationRepo.delete(competition);
         return "redirect:/main2";
@@ -95,7 +113,7 @@ public class HelloController {
     public String editCompetitionFormGet(@ModelAttribute("model") ModelMap model, @PathVariable Long id) {
         Competition competition = this.competitationRepo.getOne(id);
         model.put("competition", competition);
-        model.addAttribute("resource",resource);
+        model.addAttribute("resource", resource);
         return "editCompetition";
     }
 
@@ -129,8 +147,8 @@ public class HelloController {
         if (name != null && name.length() > 0) {
             competition.setName(name);
             this.competitationRepo.save(competition);
-            n=competition;
-            return "redirect:/competition/"+n.getId()+"/addGamers";
+            n = competition;
+            return "redirect:/competition/" + n.getId() + "/addGamers";
         } else {
             /*
             String error = "Name is required!";
@@ -147,16 +165,16 @@ public class HelloController {
 
     @GetMapping("/addCompetition")
     public String addCompetitionFormGet(@ModelAttribute("model") ModelMap model) {
-        model.addAttribute("resource",resource);
+        model.addAttribute("resource", resource);
         return "addCompetition";
     }
 
-   @RequestMapping(value = {"/addCompetition"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/addCompetition"}, method = RequestMethod.POST)
     public String addCompetition(Model model, Form form) {
 
         Competition competition = new Competition();
-        String name = form.getName();
 
+        String name = form.getName();
         if (name != null && name.length() > 0) {
             competition.setName(name);
             this.competitationRepo.save(competition);
@@ -167,10 +185,10 @@ public class HelloController {
             model.addAttribute("errorMessage", error);
 
         }*/
-       return "addCompetition";
+        return "addCompetition";
     }
 
-    public Competition n=null;
+    public Competition n = null;
 
     @RequestMapping(value = {"/addCompetition2"}, method = RequestMethod.POST)
     public String addCompetition2(Model model, Form form) {
@@ -180,13 +198,12 @@ public class HelloController {
         if (name != null && name.length() > 0) {
             competition.setName(name);
             this.competitationRepo.save(competition);
-            return "redirect:/competition/"+n.getId()+"/addGamers";
+            n = this.competitationRepo.findIdByName(form.getName());
+            return "redirect:/competition/" + n.getId() + "/addGamers";
         }
-        n=this.competitationRepo.findIdByName(form.getName());
         return "addCompetition";
 
-
-        /*else {
+       /*else {
             String error = "Name is required!";
             model.addAttribute("errorMessage", error);
 
@@ -195,14 +212,13 @@ public class HelloController {
     }
 
 
-
     //*******************************************FromErrorPageToBack******************************
     @RequestMapping(value = {"/messages"}, method = RequestMethod.POST)
     public String goBack(Model model, Form form, HttpServletRequest request) {
         String referer = request.getHeader("Referer");
-        if(referer!=null){
+        if (referer != null) {
             return "redirect:" + referer;
-        }else {
+        } else {
             return "main2";
         }
     }

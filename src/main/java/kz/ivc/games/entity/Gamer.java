@@ -19,9 +19,31 @@ public class Gamer implements Serializable{
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-
     @Column
     private String nick;
+
+    @Column
+    private byte[] avatar;
+
+    @Column
+    private String description;
+
+
+    public byte[] getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(byte[] avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public Long getId() {
         return id;

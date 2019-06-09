@@ -5,6 +5,7 @@ import kz.ivc.games.repo.CompetitationRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.SpringVersion;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -46,7 +47,6 @@ public class CompititionController {
 
     @RequestMapping(value = "/main2", method = {RequestMethod.GET,RequestMethod.POST})
     public ModelAndView main2(Model model, final HttpServletRequest request) {
-
             List<Competition> competitionList = this.competitationRepo.findAll();
             competitionList.sort(Comparator.comparing(Competition::getId).reversed());
 

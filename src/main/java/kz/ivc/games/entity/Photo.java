@@ -3,6 +3,7 @@ package kz.ivc.games.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.InputStream;
 import java.io.Serializable;
 
 /**
@@ -18,6 +19,10 @@ public class Photo implements Serializable{
 
     @Column
     private String name;
+
+    @Column
+    private byte[] data;
+
 
     @Column
     private Long idCompetition;
@@ -43,5 +48,13 @@ public class Photo implements Serializable{
 
     public void setIdCompetition(Long idCompetition) {
         this.idCompetition = idCompetition;
+    }
+
+    public byte[] getData() {
+        return data;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
     }
 }

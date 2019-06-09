@@ -1,8 +1,6 @@
 package kz.ivc.games.controller;
 
-import kz.ivc.games.dto.GameForm;
-import kz.ivc.games.dto.GamerForm;
-import kz.ivc.games.dto.PointForm;
+import kz.ivc.games.dto.*;
 import kz.ivc.games.entity.Competition;
 import kz.ivc.games.entity.Game;
 import kz.ivc.games.entity.Gamer;
@@ -19,8 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
 
 @Controller
 public class point {
@@ -40,6 +37,18 @@ public class point {
 
 
 
+
+    @RequestMapping(value = "/saveInput",method = RequestMethod.POST)
+    public String postInput (){
+        Game p=new Game();
+        p.setIdCompetition(1L);
+        p.setIdPartner1(1L);
+        p.setIdPartner2(2L);
+        p.setPoint1(8L);
+        p.setPoint2(5L);
+        this.gameRepo.save(p);
+        return "/chooseList";
+    }
 
 
 
@@ -73,9 +82,108 @@ public class point {
                 oldGame.setPoint2(Long.parseLong(point2));
                 this.gameRepo.save(oldGame);
             }
+
         }
+        winCounter();
         return "redirect:/Competition/{idC}/showGames";
     }
+
+
+
+
+    public void winCounter(){
+        List<Competition> competitionList = this.competitionRepo.findAll();
+        for (Competition competition:competitionList) {
+            List<Partner> partnerList = this.partnerRepo.findByIdCompetition(competition.getId());
+        List<ResultDTO> resultDTOList = new ArrayList<ResultDTO>() ;
+        long idOfBestGamer;
+        int agrBall;
+        long agrPoint1;  // salgan sharlar sany
+        long agrPoint2;  // jibergen sharlar sany
+
+        for (Partner partner1 : partnerList) {
+
+            idOfBestGamer=0;
+            agrBall = 0;
+            agrPoint1 = 0;  // salgan sharlar sany
+            agrPoint2 = 0;  // jibergen sharlar sany
+
+
+            //*********По партнерам найтти имена играков1
+            ResultDTO resultDTO = new ResultDTO();
+            Gamer gamer1 = this.gamerRepo.getOne(partner1.getIdGamer());
+            resultDTO.setId(gamer1.getId());
+
+            // ********Игрок2
+            List<ResultGameDTO> resultGameDTOS = new ArrayList<>();
+
+            for (Partner partner2 : partnerList) {
+                ResultGameDTO resultGameDTO = new ResultGameDTO();
+
+                if (partner1.getId() != partner2.getId()) {
+
+                    Gamer gamer2 = this.gamerRepo.getOne(partner2.getIdGamer());
+                    Long idGamer=gamer2.getId();
+                    Gamer gamer=this.gamerRepo.findOne(idGamer);
+
+                    //******Create game where play Gamer1 and Gamer2
+                    Game game=this.gameRepo.findByIdPartner1AndIdPartner2AndIdCompetition(partner1.getId(), partner2.getId(), competition.getId());
+
+                    //***********Game
+                    if (game != null) {
+                        resultGameDTO.setId(game.getId());
+
+                        resultGameDTO.setId(game.getId());
+                        resultGameDTO.setIdGamer(idGamer);
+                        resultGameDTO.setPoint1(game.getPoint1());
+                        resultGameDTO.setPoint2(game.getPoint2());
+                        agrPoint1 = agrPoint1 + game.getPoint1();
+                        agrPoint2 = agrPoint2 + game.getPoint2();
+
+                        if (game.getPoint1() > game.getPoint2()) {
+                            ++agrBall;
+                        }
+
+                    } else {
+                            //resultGameDTO.setNick(gamer2.getNick());
+                            //resultGameDTO.setId(newGame.getId());
+                            resultGameDTO.setIdGamer(partner2.getIdGamer());
+                        }
+
+                } else {
+                    resultGameDTO.setIdGamer(gamer1.getId());
+                }
+
+                resultGameDTOS.add(resultGameDTO);
+            }
+            resultDTO.setAgrPoint1(agrPoint1);
+            resultDTO.setAgrPoint2(agrPoint2);
+
+            resultDTO.setAgrBall(agrBall);
+
+            resultDTO.setDeference(agrPoint1 - agrPoint2);
+
+
+            resultDTO.setGameList(resultGameDTOS);
+            resultDTOList.add(resultDTO);
+        }
+
+            //******* sort by deference and agrBall
+            resultDTOList.sort(Comparator.comparing(ResultDTO::getAgrBall)
+                    .reversed()
+                    .thenComparing(Comparator.comparing(ResultDTO::getDeference)
+                            .reversed()) );
+
+            if (!resultDTOList.isEmpty()) {
+                idOfBestGamer=resultDTOList.get(0).getId();
+                System.out.print("///////////////////////////////////////" + idOfBestGamer);
+                competition.setWinner_game_id(idOfBestGamer);
+            }
+            this.competitionRepo.save(competition);
+        }
+    }
+
+
 
 
 

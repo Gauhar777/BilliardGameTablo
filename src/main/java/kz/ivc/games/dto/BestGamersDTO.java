@@ -11,6 +11,42 @@ public class BestGamersDTO implements Serializable {
     private String FIO;
     private long deference;
     private int agrBall;
+    private int gameCount;
+    private String description;
+    private boolean avatar;
+    private int win;
+
+    public int getWin() {
+        return win;
+    }
+
+    public void setWin(int win) {
+        this.win = win;
+    }
+
+    public boolean isAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(boolean avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getGameCount() {
+        return gameCount;
+    }
+
+    public void setGameCount(int gameCount) {
+        this.gameCount = gameCount;
+    }
 
     public void setId(Long id) {
         this.id = id;

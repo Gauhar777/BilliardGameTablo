@@ -1,18 +1,33 @@
 @media screen and (min-width: 900px) and (max-width: 3000px) {
-    .icon{
-        display: none;
-    }
-
+    .icon{display: none;}
+    .box{width: 100%;}
+    .player__txt{padding-top:35px;width: 80%;}
+    .player__header{padding-left:150px;}
+    .player__name{width: 100%;text-align: left; }
+    .player__back{top:50%;}
+    .ttl_2{width: 60%;}
+    .ttl_1{display: none;}
 }
 @media screen and  (max-width: 900px){
-    .word{
-        display: none;
-    }
+    .box{justify-content: center;}
 
-    .main__header a {
-        font-size: 20px;
+    .ttl_2{display: none;}
+    .ttl_1,.ttl_listGamer{text-align: left;width: 90%;}
+    .headline{width: 100%;display: flex;margin-bottom: 30px;}
+    .word{display: none;}
+    .main__header a {font-size: 20px;}
+    .player__txt h3{
+        text-align: center;
+        margin: 20px 0 10px 0;
     }
-
+    .gamer{
+        margin-bottom: 50px;
+    }
+    .body::after, body::before{width: 55px;}
+    .rating-all thead::after, .rating-all thead::before {height: 114px;}
+    .player__txt{
+        width: 100%;
+    }
     .rating-all__header, .rating-all__header h1 {
         font-size: 24px;
     }
@@ -38,6 +53,7 @@
     }
     .rating-all__icon{
         left: 24px;
+        margin-right: 40px;
     }
     .rating-all__control{
         right: 24px;
@@ -58,10 +74,42 @@
     .main__title{
         font-size: 36px;
     }
+
+    .zoom-gallery .item img{
+        width: 100%;
+        height: auto;
+    }
+    .player__img{
+        margin: auto;
+    }
+
+    .player__txt p,.player__itog{
+        width: 90%;
+        margin: auto;
+    }
+
+    .player__name{
+        width: 100%;
+        text-align: center;
+    }
+    .player__header{
+        padding-left:80px;
+    }
+    .player__back{top:26%;}
+
+    .btns{
+        margin-top: 30px;
+        width:100%;
+    }
+
 }
 
 @media screen and  (max-width: 350px){
     .main__header a.arrow:after,.tournament__btn:after{
         display: none;
+    }
+    .zoom-gallery .item img {
+        width: 100%;
+        height: auto;
     }
 }

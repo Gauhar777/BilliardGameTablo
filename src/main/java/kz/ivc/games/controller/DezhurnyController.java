@@ -40,6 +40,10 @@ public class DezhurnyController {
 
     @RequestMapping(value = "{idC}/{idGamer}/dezhurit", method = RequestMethod.GET)
     public String dezhuritGamer( @PathVariable Long idC,@PathVariable Long idGamer ) {
+        Dezhurny oldDezhurny=this.dezhurnyRepo.findByIdCompetition(idC);
+        if(oldDezhurny!=null){
+            dezhurnyRepo.delete(oldDezhurny.getId());
+        }
         Dezhurny dezhurny=new Dezhurny();
         dezhurny.setIdCompetition(idC);
         dezhurny.setIdGamer(idGamer);

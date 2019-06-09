@@ -1,20 +1,23 @@
 package kz.ivc.games.dto;
 
+import lombok.Data;
+
 /**
  * Created by balgi on 05.06.2018.
  */
+
 public class GamerForm {
 
-    private String Id;
+    private String id;
     private String nick;
-
+    private String description;
 
     public String getId() {
-        return Id;
+        return id;
     }
 
     public void setId(String id) {
-        this.Id = Id;
+        this.id = id;
     }
 
     public String getNick() {
@@ -23,5 +26,13 @@ public class GamerForm {
 
     public void setNick(String nick) {
         this.nick = nick;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

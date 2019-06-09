@@ -32,18 +32,17 @@
     <main class="main">
         <div class="photo">
             <div class="photo__header">
-
+                <#--<a href="#" data-toggle="modal" data-target="#photo" class="photo__icon"><img src="img/photo.png" alt=""></a>-->
                 <h1>${model.competition.name}</h1>
 
                 <div class="photo__control">
-                    <a href="#"><img src="/img/close.png" alt=""></a>
+                    <a href="#" data-toggle="modal" data-target="#photo" ><img src="/img/edit.png" alt=""></a>
+                    <a href="/${model.competition.id}/deletePhoto"><img src="/img/close.png" alt=""></a>
                 </div>
 
             </div>
             <div class="photo__main">
-
-                <img src="/up/${model.photo.name}" alt="">
-
+                <img src="/${model.photo.id}/img" alt="">
             </div>
             <div class="photo__footer">
                 <a href="/Competition/${model.competition.id}/showGames" class="photo__btn ok">ОК</a>

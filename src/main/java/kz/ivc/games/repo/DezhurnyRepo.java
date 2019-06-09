@@ -8,5 +8,5 @@ import java.util.List;
 public interface DezhurnyRepo extends JpaRepository<Dezhurny, Long> {
     Dezhurny findByIdCompetitionAndIdGamer(long idCompetition, long idGamer);
 
-    List<Dezhurny> findByIdCompetition(Long idCompetition);
+    Dezhurny findByIdCompetition(Long idCompetition);
 }

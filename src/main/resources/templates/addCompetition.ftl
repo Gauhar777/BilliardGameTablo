@@ -31,9 +31,9 @@
 <div class="wrp">
     <main class="main" id="main">
         <form id="new-tournament" class="new-tournament" name="comp"  method="POST">
-            <input id="name" name="name" class="new-tournament__input" type="text" placeholder="Название турнира"/>
-            <button type="submit" class="new-tournament__add" formaction="/addCompetition2">Добавить игроков</button>
-            <input class="create-tournament__btn" type="submit" formaction="/addCompetition" value="Сохранить"/>
+            <input id="name" name="name" class="new-tournament__input" type="text" placeholder="${model["resource"].getString("Name")}"/>
+            <button type="submit" class="new-tournament__add" formaction="/addCompetition2">${model["resource"].getString("Add new gamer")}</button>
+            <input class="create-tournament__btn" type="submit" formaction="/addCompetition" value="${model["resource"].getString("save")}"/>
         </form>
     </main>
 </div>

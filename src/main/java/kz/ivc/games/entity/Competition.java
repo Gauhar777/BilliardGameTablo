@@ -23,6 +23,18 @@ public class Competition {
     @Column(name = "name")
     private String name;
 
+
+    @Column()
+    private long winner_game_id;
+
+    public long getWinner_game_id() {
+        return winner_game_id;
+    }
+
+    public void setWinner_game_id(long winner_game_id) {
+        this.winner_game_id = winner_game_id;
+    }
+
     public Long getId(){
     return id;
     }

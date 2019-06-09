@@ -36,12 +36,7 @@
         <h1 class="main__title">Общий список игроков</h1>
         <div class="tournament">
 
-
-
-
-
-
-            <a href="#" class="tournament__btn" data-toggle="modal" data-target="#myModal">Новый игрок</a>
+         <a href="#" class="tournament__btn" data-toggle="modal" data-target="#myModal">Новый игрок</a>
 
             <#if model["gamers"]?has_content>
                 <#list model["gamers"] as gamer>
@@ -49,19 +44,12 @@
                         <#if gamer.choosed==false>
                             <li><a href="/${model.competition.id}/${gamer.idGamer}/choosePartner" class="js-tournament">${gamer.nick}</a></li>
                         <#else>
-                            <li><a href="/${model.competition.id}/${gamer.idGamer}/excludePartner" class="ok js-tournament">${gamer.nick}</a></li>
+                            <li><a href="/${model.competition.id}/${gamer.idGamer}/excludePartnerFromList" class="ok js-tournament">${gamer.nick}</a></li>
                         </#if>
                     </ul>
                 </#list>
             </#if>
             <a href="/Competition/${model.competition.id}/showGames" class="tournament__btn ok">ОК</a>
-
-
-
-
-
-
-
 
             <!-- Добавить нового игрока -->
             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -74,7 +62,7 @@
                         <div class="modal-body">
                             <form class="tournament__form" method="POST"  action="/${model.competition.id}/addGamers">
                                 <input class="tournament__input" name="nick" id="nick"  type="text"/>
-                                <input class="tournament__submit"  type="submit" value="Ok"/>
+                                <input class="tournament__submit"  type="submit" value="Сохранить"/>
                             </form>
                         </div>
                     </div>
